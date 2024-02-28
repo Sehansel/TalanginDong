@@ -66,19 +66,37 @@ function Login(): React.JSX.Element {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
 
-  // For validation later
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
 
-  // For validation later
   const handlePasswordChange = (text: string) => {
     setPassword(text);
   };
 
-  const loginHandler = () => {
+  const loginHandler = async () => {
+    try{
+      if (!email || !password) {
+        return;
+      }
+      const response = await fetch('https://talangindong-api.icarusphantom.dev/v1/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+      });
 
-  };
+      if (!response.ok) {
+        throw new Error('Failed to log in');
+      }
+      
+      navigation.navigate('Home');
+      } 
+      catch (error: any) {
+      console.error('Error logging in:', error.message);
+    }
+    };
 
   const navigation = useNavigation<HomeScreenNavigationProp>()
 

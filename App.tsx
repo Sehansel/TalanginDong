@@ -29,6 +29,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Register from './screens/Register';
 import Login from './screens/Login';
+import Main from './screens/Main';
+import Home from './screens/Home';
 import { HomeStackNavigationParamList } from './type';
 
 type SectionProps = PropsWithChildren<{
@@ -73,8 +75,10 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Main" component={Main} options={{headerShown: false}}/>
         <Stack.Screen name="Login" component={Login} options={{headerShown: false}}/>
         <Stack.Screen name="Register" component={Register} options={{headerShown: false}}/>
+        <Stack.Screen name="Home" component={Home} options={{headerShown: false}}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
