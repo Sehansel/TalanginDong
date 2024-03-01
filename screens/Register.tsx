@@ -128,8 +128,8 @@ function Register(): React.JSX.Element {
       }
     catch (error :any) {
       console.error('Error registering user:', error.message);
-      }
-    };
+    }
+  };
 
   React.useEffect(() => {
     const backHandler = BackHandler.addEventListener(
