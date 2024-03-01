@@ -18,6 +18,7 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 
 import {
@@ -65,19 +66,38 @@ function Login(): React.JSX.Element {
 
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [modalVisible, setModalVisible] = React.useState(false);
 
-  // For validation later
   const handleEmailChange = (text: string) => {
     setEmail(text);
   };
 
-  // For validation later
   const handlePasswordChange = (text: string) => {
     setPassword(text);
   };
 
-  const loginHandler = () => {
+  const loginHandler = async () => {
+    try{
+      if (!email || !password) {
+        return;
+      }
+      const response = await fetch('https://talangindong-api.icarusphantom.dev/v1/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+      });
 
+      if (!response.ok) {
+        throw new Error('Failed to log in');
+      }
+      
+      navigation.navigate('Home');
+    } 
+    catch (error: any) {
+        setModalVisible(true);
+    }
   };
 
   const navigation = useNavigation<HomeScreenNavigationProp>()
@@ -117,6 +137,23 @@ function Login(): React.JSX.Element {
       <View style={styles.buttonContainer}>
         <Button title="Login" onPress={loginHandler} />
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>Login Failed</Text>
+            <Button title="OK" onPress={() => 
+            {
+              setModalVisible(false);
+            }} />
+          </View>
+        </View>
+      </Modal>
       <View>
         <Text>
           Don't have an account? Tap{' '}
@@ -175,6 +212,19 @@ const styles = StyleSheet.create({
     marginTop: '10%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 5, 
   },
 });
 

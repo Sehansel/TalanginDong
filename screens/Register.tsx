@@ -19,6 +19,8 @@ import {
   Button,
   TouchableOpacity,
   Image,
+  BackHandler,
+  Modal,
 } from 'react-native';
 import {
   Colors,
@@ -29,6 +31,7 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import { useNavigation } from '@react-navigation/native';
+import { HomeScreenNavigationProp, HomeStackNavigationParamList } from '../type';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -60,13 +63,15 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   );
 }
 
-function App(): React.JSX.Element {
+function Register(): React.JSX.Element {
 
-  const navigation = useNavigation();
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const [email, setEmail] = React.useState('');
-  const [phoneNumber, setPhoneNumber] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [emailError, setEmailError] = React.useState('');
+  const [passwordError, setPasswordError] = React.useState('');
+  const [modalVisible, setModalVisible] = React.useState(false);
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -77,29 +82,69 @@ function App(): React.JSX.Element {
 
   // For validation later
   const handleEmailChange = (text: string) => {
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
+
+    setEmailError(isValid ? '' : 'Invalid email address');
+    
     setEmail(text);
   };
 
   // For validation later
-  const handlePhoneNumberChange = (text: string) => {
-    setPhoneNumber(text);
-  };
-
-  // For validation later
   const handlePasswordChange = (text: string) => {
+    const isLengthValid = text.length >= 6;
+    const hasUppercase = /[A-Z]/.test(text);
+    const hasLowercase = /[a-z]/.test(text);
+    const hasNumber = /\d/.test(text);
+
+  setPasswordError(
+    !isLengthValid
+      ? 'Password must be at least 6 characters long'
+      : !hasUppercase || !hasLowercase
+      ? 'Password must contain both uppercase and lowercase letters'
+      : !hasNumber
+      ? 'Password must contain at least one number'
+      : ''
+  );
     setPassword(text);
   };
 
+  const handleRegister = async () => {
+    try{
+      if (emailError || passwordError) {
+        return;
+      }
+      const response = await fetch('https://talangindong-api.icarusphantom.dev/v1/auth/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to register user');
+      }
+      setModalVisible(true);
+    }
+    catch (error :any) {
+      console.error('Error registering user:', error.message);
+    }
+  };
+
+  React.useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      () => {
+        navigation.goBack();
+        return true; 
+      }
+    );
+
+    return () => backHandler.remove();
+  }, [navigation]);
+
   return (
     <SafeAreaView style={backgroundStyle}>
-      <View>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Image
-            source={require('../image/backArrow.jpg')} 
-            style={{ width: 24, height: 24, marginLeft: '5%', marginTop: '5%'}}
-          />
-        </TouchableOpacity>
-      </View>
       <View style={styles.sectionContainer}>
         <Section title="Register">
         </Section>
@@ -112,16 +157,7 @@ function App(): React.JSX.Element {
           value={email}
           onChangeText={handleEmailChange}
         />
-      </View>
-      <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Phone Number"
-            placeholderTextColor="#888"
-            value={phoneNumber}
-            onChangeText={handlePhoneNumberChange}
-            keyboardType="phone-pad"
-          />
+        {!!emailError && <Text style={styles.error}>{emailError}</Text>}
       </View>
       <View style={styles.inputContainer}>
           <TextInput
@@ -132,10 +168,29 @@ function App(): React.JSX.Element {
             onChangeText={handlePasswordChange}
             secureTextEntry={true}
           />
+          {!!passwordError && <Text style={styles.error}>{passwordError}</Text>}
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Register" />
+        <Button title="Register" onPress={handleRegister}/>
       </View>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(false);
+        }}>
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text>User registered successfully!</Text>
+            <Button title="OK" onPress={() => 
+            {
+              setModalVisible(false);
+              navigation.navigate('Login');
+            }} />
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -184,6 +239,24 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  error: {
+    color: 'red',
+    fontSize: 14,
+    marginTop: 5,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    elevation: 5, 
+  },
 });
 
-export default App;
+export default Register;
