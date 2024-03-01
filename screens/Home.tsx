@@ -14,88 +14,141 @@ import {
 import { Link, useNavigation } from '@react-navigation/native';
 import { HomeScreenNavigationProp, HomeStackNavigationParamList } from '../type';
 
-type SectionProps = PropsWithChildren<{
-  title: string;
-}>;
-
-
-function Login(): React.JSX.Element {
+function Home(): React.JSX.Element {
 
   const navigation = useNavigation<HomeScreenNavigationProp>()
 
   const backgroundStyle = {
     flex: 1,
-    backgroundColor: 'blue',
+    backgroundColor: 'white',
   };
+
+  const today = new Date();
+
+  const formattedDate = today.toLocaleDateString('en-US', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+  })
 
   return (
     <SafeAreaView style={backgroundStyle}>
-        <View>
-          
+      <View style={styles.container}>
+        <View style={styles.contentContainer}>
+          <View>
+            <Text style={styles.labelText}>Today's Date:</Text>
+            <Text style={styles.dateText}>{formattedDate}</Text>
+          </View>
+          <View style={styles.imageContainer}>
+            <Image
+              source={require('../image/logo.png')}
+              style={styles.image}
+            />
+          </View>
         </View>
+        <View style={styles.centerContainer}>
+          <View style={styles.imageTextContainer}>
+            <Image
+              source={require('../image/photo.png')}
+              style={styles.smallImage}
+            />
+            <Text style={styles.smallText}>Upload Bill</Text>
+            
+          </View>
+          <View style={styles.imageTextContainer}>
+            <Image
+              source={require('../image/friend.png')}
+              style={styles.smallImage}
+            />
+            <Text style={styles.smallText}>Add Friends</Text>
+          </View>
+          <View style={styles.imageTextContainer}>
+            <Image
+              source={require('../image/history.png')}
+              style={styles.smallImage}
+            />
+            <Text style={styles.smallText}>History</Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.bottomContainer}>
+          <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+            <Image
+              source={require('../image/home.png')}
+              style={styles.bottomImage}
+            />
+          </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  sectionTitle: {
-    fontSize: 35,
-    fontWeight: '600',
-    color: 'white',
-    justifyContent: 'center',
-    textAlign: 'center',
+  container: {
+    flex: 1,
   },
-  sectionDescription: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: 'white',
-    justifyContent: 'center',
-    textAlign: 'center'
+  contentContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    marginTop: '5%'
   },
-  loginContainer: {
-    marginTop: '7%',
-    marginLeft: '25%',
-    justifyContent: 'center',
+  labelText: {
+    fontSize: 17,
+    marginBottom: 5,
+  },
+  dateText: {
+    fontSize: 17,
+    color: 'blue',
+  },
+  imageContainer: {
+    marginLeft: '10%'
+  },
+  image: {
+    width: 70,
+    height: 70,
+    resizeMode: 'contain',
+  },
+  centerContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
     alignItems: 'center',
-    color: 'white',
-    width: 200, 
-    height: 43, 
-    borderRadius: 28, 
-    backgroundColor: 'white',
-    borderColor: '#39e75f',
-    borderWidth: 2
+    paddingVertical: 20,
+    backgroundColor: '#d0f0ff',
+    marginTop: 20,
+    borderRadius: 100,
+    overflow: 'hidden'
   },
-  registerContainer: {
-    marginTop: '5%',
-    marginLeft: '25%',
-    justifyContent: 'center',
+  imageTextContainer: {
     alignItems: 'center',
-    color: 'white',
-    width: 200, 
-    height: 43, 
-    borderRadius: 28, 
-    backgroundColor: '#39e75f',
-    borderColor: 'white',
-    borderWidth: 2
   },
-  orText:{
-    fontSize: 18,
-    fontWeight: '600',
-    color: 'black',
+  smallImage: {
+    width: 50,
+    height: 50,
+    resizeMode: 'contain',
+  },
+  smallText: {
+    marginTop: 5,
+    color: 'black'
+  },
+  bottomContainer: {
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'center',
-    textAlign: 'center',
-    marginTop: '3%'
+    backgroundColor: '#1c2dc7',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 15,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
   },
-  loginButtonText: {
-    color: '#39e75f', 
-    fontSize: 16, 
-    fontWeight: 'bold', 
-  },
-  registerButtonText: {
-    color: 'white', 
-    fontSize: 16, 
-    fontWeight: 'bold', 
-  },
+  bottomImage: {
+    width: 50,
+    height: 50,
+  }
 });
 
-export default Login;
+export default Home;

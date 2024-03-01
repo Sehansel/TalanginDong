@@ -5,13 +5,15 @@ export type HomeStackNavigationParamList={
     Login:undefined;
     Register:undefined;
     Home:undefined;
+    ScanReceipt:undefined;
 };
 
 export type HomeScreenNavigationProp=NativeStackNavigationProps<
 Main,
 Login,
 Register,
-Home
+Home,
+ScanReceipt
 >;
 
 

@@ -19,7 +19,7 @@ type SectionProps = PropsWithChildren<{
 }>;
 
 
-function Login(): React.JSX.Element {
+function Main(): React.JSX.Element {
 
   const navigation = useNavigation<HomeScreenNavigationProp>()
 
@@ -123,4 +123,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Login;
+export default Main;

@@ -63,7 +63,7 @@ function Section({children, title}: SectionProps): React.JSX.Element {
   );
 }
 
-function App(): React.JSX.Element {
+function Register(): React.JSX.Element {
 
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -126,7 +126,7 @@ function App(): React.JSX.Element {
       }
       setModalVisible(true);
       }
-      catch (error :any) {
+    catch (error :any) {
       console.error('Error registering user:', error.message);
       }
     };
@@ -259,4 +259,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Register;
