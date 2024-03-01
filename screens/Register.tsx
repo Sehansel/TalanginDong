@@ -125,7 +125,7 @@ function Register(): React.JSX.Element {
         throw new Error('Failed to register user');
       }
       setModalVisible(true);
-      }
+    }
     catch (error :any) {
       console.error('Error registering user:', error.message);
     }

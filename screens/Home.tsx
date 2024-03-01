@@ -42,6 +42,7 @@ function Home(): React.JSX.Element {
           </View>
           <View style={styles.imageContainer}>
             <Image
+              // replace later with profile p
               source={require('../image/logo.png')}
               style={styles.image}
             />
@@ -49,12 +50,13 @@ function Home(): React.JSX.Element {
         </View>
         <View style={styles.centerContainer}>
           <View style={styles.imageTextContainer}>
+            <TouchableOpacity onPress={() => navigation.navigate('ScanReceipt')}>
             <Image
               source={require('../image/photo.png')}
               style={styles.smallImage}
             />
             <Text style={styles.smallText}>Upload Bill</Text>
-            
+            </TouchableOpacity>
           </View>
           <View style={styles.imageTextContainer}>
             <Image
@@ -73,7 +75,7 @@ function Home(): React.JSX.Element {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Main')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
             <Image
               source={require('../image/home.png')}
               style={styles.bottomImage}
@@ -97,6 +99,8 @@ const styles = StyleSheet.create({
   labelText: {
     fontSize: 17,
     marginBottom: 5,
+    fontWeight: 'bold',
+    color: 'black',
   },
   dateText: {
     fontSize: 17,

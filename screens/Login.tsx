@@ -94,7 +94,7 @@ function Login(): React.JSX.Element {
       }
       
       navigation.navigate('Home');
-      } 
+    } 
     catch (error: any) {
         setModalVisible(true);
     }
