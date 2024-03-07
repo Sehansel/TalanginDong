@@ -1,22 +1,18 @@
 import React from 'react';
-import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   Text,
-  useColorScheme,
   View,
   TouchableOpacity,
   Image,
-  ImageBackground,
 } from 'react-native';
 
-import { Link, useNavigation } from '@react-navigation/native';
-import { HomeScreenNavigationProp, HomeStackNavigationParamList } from '../type';
+import {useNavigation} from '@react-navigation/native';
+import {HomeScreenNavigationProp} from '../type';
 
 function Home(): React.JSX.Element {
-
-  const navigation = useNavigation<HomeScreenNavigationProp>()
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const backgroundStyle = {
     flex: 1,
@@ -26,11 +22,11 @@ function Home(): React.JSX.Element {
   const today = new Date();
 
   const formattedDate = today.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-  })
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  });
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -42,7 +38,7 @@ function Home(): React.JSX.Element {
           </View>
           <View style={styles.imageContainer}>
             <Image
-              // replace later with profile p
+              // replace later with profile picture
               source={require('../image/logo.png')}
               style={styles.image}
             />
@@ -50,12 +46,13 @@ function Home(): React.JSX.Element {
         </View>
         <View style={styles.centerContainer}>
           <View style={styles.imageTextContainer}>
-            <TouchableOpacity onPress={() => navigation.navigate('ScanReceipt')}>
-            <Image
-              source={require('../image/photo.png')}
-              style={styles.smallImage}
-            />
-            <Text style={styles.smallText}>Upload Bill</Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('ScanReceipt')}>
+              <Image
+                source={require('../image/photo.png')}
+                style={styles.smallImage}
+              />
+              <Text style={styles.smallText}>Upload Bill</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.imageTextContainer}>
@@ -75,12 +72,12 @@ function Home(): React.JSX.Element {
         </View>
       </View>
       <View style={styles.bottomContainer}>
-          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
-            <Image
-              source={require('../image/home.png')}
-              style={styles.bottomImage}
-            />
-          </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+          <Image
+            source={require('../image/home.png')}
+            style={styles.bottomImage}
+          />
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -94,7 +91,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 20,
-    marginTop: '5%'
+    marginTop: '5%',
   },
   labelText: {
     fontSize: 17,
@@ -107,7 +104,7 @@ const styles = StyleSheet.create({
     color: 'blue',
   },
   imageContainer: {
-    marginLeft: '10%'
+    marginLeft: '10%',
   },
   image: {
     width: 70,
@@ -122,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#d0f0ff',
     marginTop: 20,
     borderRadius: 100,
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   imageTextContainer: {
     alignItems: 'center',
@@ -134,7 +131,7 @@ const styles = StyleSheet.create({
   },
   smallText: {
     marginTop: 5,
-    color: 'black'
+    color: 'black',
   },
   bottomContainer: {
     flex: 1,
@@ -152,7 +149,7 @@ const styles = StyleSheet.create({
   bottomImage: {
     width: 50,
     height: 50,
-  }
+  },
 });
 
 export default Home;
