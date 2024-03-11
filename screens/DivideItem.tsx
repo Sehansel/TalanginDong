@@ -13,7 +13,7 @@ import {useNavigation} from '@react-navigation/native';
 import {HomeScreenNavigationProp} from '../type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-function ViewItem(): React.JSX.Element {
+function ScanReceipt(): React.JSX.Element {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const backgroundStyle = {
@@ -24,6 +24,10 @@ function ViewItem(): React.JSX.Element {
   const [scannedData, setScannedData] = useState<{
     data: {items: {item: string; price: number}[]};
   } | null>(null);
+
+  const formatPrice = (price: number) => {
+    return price.toLocaleString();
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,25 +46,6 @@ function ViewItem(): React.JSX.Element {
 
     fetchData();
   }, []);
-
-  const formatPrice = (price: number) => {
-    return price.toLocaleString();
-  };
-
-  const deleteItem = async (index: number) => {
-    if (scannedData) {
-      const updatedItems = scannedData.data.items.filter((_, i) => i !== index);
-      setScannedData({...scannedData, data: {items: updatedItems}});
-      try {
-        await AsyncStorage.setItem(
-          'scanData',
-          JSON.stringify({data: {items: updatedItems}}),
-        );
-      } catch (error: any) {
-        console.error('Error updating AsyncStorage data', error.message);
-      }
-    }
-  };
 
   return (
     <SafeAreaView style={backgroundStyle}>
@@ -89,21 +74,19 @@ function ViewItem(): React.JSX.Element {
               </View>
               <Image
                 source={require('../image/edit.jpg')}
-                style={[styles.editDeleteButton, styles.imageColumn]}
+                style={[styles.editDeleteButton, styles.otherColumn]}
               />
-              <TouchableOpacity onPress={() => deleteItem(index)}>
-                <Image
-                  source={require('../image/delete.jpg')}
-                  style={[styles.editDeleteButton, styles.imageColumn]}
-                />
-              </TouchableOpacity>
+              <Image
+                source={require('../image/delete.jpg')}
+                style={[styles.editDeleteButton, styles.otherColumn]}
+              />
             </View>
           ))}
       </ScrollView>
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('DivideItem')}>
+          onPress={() => navigation.navigate('ViewItem')}>
           <Text style={styles.buttonText}>Divide Bill</Text>
         </TouchableOpacity>
       </View>
@@ -170,9 +153,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: 'black',
   },
-  imageColumn: {
-    flex: 1,
-  },
   otherColumn: {
     flex: 1,
     textAlign: 'center',
@@ -181,10 +161,9 @@ const styles = StyleSheet.create({
     color: 'black',
   },
   editDeleteButton: {
-    height: 40,
-    width: 40,
+    height: 30,
+    width: 30,
     resizeMode: 'contain',
-    marginLeft: '5%',
   },
   tableData: {
     fontSize: 23,
@@ -222,4 +201,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ViewItem;
+export default ScanReceipt;

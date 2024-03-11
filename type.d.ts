@@ -7,6 +7,7 @@ export type HomeStackNavigationParamList = {
   Home: undefined;
   ScanReceipt: undefined;
   ViewItem: undefined;
+  DivideItem: undefined;
 };
 
 export type HomeScreenNavigationProp = NativeStackNavigationProps<
@@ -15,5 +16,6 @@ export type HomeScreenNavigationProp = NativeStackNavigationProps<
   Register,
   Home,
   ScanReceipt,
-  ViewItem
+  ViewItem,
+  DivideItem
 >;

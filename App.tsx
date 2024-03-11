@@ -33,6 +33,7 @@ import Main from './screens/Main';
 import Home from './screens/Home';
 import ScanReceipt from './screens/ScanReceipt';
 import ViewItem from './screens/ViewItems';
+import DivideItem from './screens/DivideItem';
 import {HomeStackNavigationParamList} from './type';
 
 const Stack = createNativeStackNavigator<HomeStackNavigationParamList>();
@@ -48,6 +49,11 @@ function App(): React.JSX.Element {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
+          name="ViewItem"
+          component={ViewItem}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="Home"
           component={Home}
           options={{headerShown: false}}
@@ -57,6 +63,11 @@ function App(): React.JSX.Element {
           component={Main}
           options={{headerShown: false}}
         />
+        {/* <Stack.Screen
+          name="Home"
+          component={Home}
+          options={{headerShown: false}}
+        /> */}
         <Stack.Screen
           name="Login"
           component={Login}
@@ -72,9 +83,14 @@ function App(): React.JSX.Element {
           component={ScanReceipt}
           options={{headerShown: false}}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
           name="ViewItem"
           component={ViewItem}
+          options={{headerShown: false}}
+        /> */}
+        <Stack.Screen
+          name="DivideItem"
+          component={DivideItem}
           options={{headerShown: false}}
         />
       </Stack.Navigator>

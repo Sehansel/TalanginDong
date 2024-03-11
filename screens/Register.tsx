@@ -96,7 +96,7 @@ function Register(): React.JSX.Element {
         return;
       }
       const response = await fetch(
-        'https://talangindong-api.icarusphantom.dev/v1/auth/signup',
+        'https://talangindong-api.icarusphantom.dev/v1/auth/register',
         {
           method: 'POST',
           headers: {

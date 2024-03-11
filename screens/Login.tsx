@@ -1,5 +1,6 @@
 import React from 'react';
 import type {PropsWithChildren} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
   StyleSheet,
@@ -79,6 +80,11 @@ function Login(): React.JSX.Element {
       if (!response.ok) {
         throw new Error('Failed to log in');
       }
+
+      const data = await response.json();
+      const token = data.token;
+
+      await AsyncStorage.setItem('token', token);
 
       navigation.navigate('Home');
     } catch (error: any) {
