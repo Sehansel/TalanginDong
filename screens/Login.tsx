@@ -66,6 +66,7 @@ function Login(): React.JSX.Element {
       if (!email || !password) {
         return;
       }
+
       const response = await fetch(
         'https://talangindong-api.icarusphantom.dev/v1/auth/login',
         {
@@ -81,13 +82,15 @@ function Login(): React.JSX.Element {
         throw new Error('Failed to log in');
       }
 
-      const data = await response.json();
-      const token = data.token;
+      const responseData = await response.json();
+
+      const token = responseData.data.token;
 
       await AsyncStorage.setItem('token', token);
 
       navigation.navigate('Home');
     } catch (error: any) {
+      console.error('Error retrieving token:', error.message);
       setModalVisible(true);
     }
   };

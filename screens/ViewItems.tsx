@@ -43,6 +43,7 @@ function ViewItem(): React.JSX.Element {
         const data = await AsyncStorage.getItem('scanData');
         if (data) {
           setScannedData(JSON.parse(data));
+          console.log(data);
         }
         if (!data) {
           console.log('Cannot get data');
@@ -145,7 +146,6 @@ function ViewItem(): React.JSX.Element {
           <Text style={(styles.tableHeader, styles.productColumn)}>
             Product
           </Text>
-          <Text style={(styles.tableHeader, styles.otherColumn)}>Edit</Text>
           <Text style={(styles.tableHeader, styles.otherColumn)}>Delete</Text>
         </View>
       </View>
@@ -157,10 +157,6 @@ function ViewItem(): React.JSX.Element {
                 <Text style={styles.tableData}>{item.item}</Text>
                 <Text style={styles.price}>Rp.{formatPrice(item.price)}</Text>
               </View>
-              <Image
-                source={require('../image/edit.jpg')}
-                style={[styles.editDeleteButton, styles.imageColumn]}
-              />
               <TouchableOpacity onPress={() => deleteItem(index)}>
                 <Image
                   source={require('../image/delete.jpg')}

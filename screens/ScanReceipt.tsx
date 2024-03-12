@@ -75,21 +75,21 @@ function ScanReceipt(): React.JSX.Element {
 
   const scanHandler = async (base64Data: string) => {
     try {
-      // const getToken = async () => {
-      //   try {
-      //     const token = await AsyncStorage.getItem('token');
-      //     return token;
-      //   } catch (error: any) {
-      //     console.error('Error retrieving token:', error.message);
-      //     return null;
-      //   }
-      // };
+      const getToken = async () => {
+        try {
+          const token = await AsyncStorage.getItem('token');
+          return token;
+        } catch (error: any) {
+          console.error('Error retrieving token:', error.message);
+          return null;
+        }
+      };
 
-      // const token = await getToken();
+      const token = await getToken();
 
-      // if (!token) {
-      //   throw new Error('Token not found');
-      // }
+      if (!token) {
+        throw new Error('Token not found');
+      }
 
       const response = await fetch(
         'https://talangindong-api.icarusphantom.dev/v1/textract/scan',
@@ -97,7 +97,7 @@ function ScanReceipt(): React.JSX.Element {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZ21haWwuY29tIiwidXNlcm5hbWUiOiJ0ZXN0QGdtYWlsLmNvbSIsImlhdCI6MTcwOTk3Nzg3MSwiZXhwIjoxNzEwNTgyNjcxfQ.X6QAMKpJ2OFXLzHIDhycS_WidkCRlUP4s1rm2x-olTc',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({bytes: base64Data}),
         },
@@ -144,10 +144,12 @@ function ScanReceipt(): React.JSX.Element {
       </View>
       <View style={styles.bottomContainer}>
         <View>
-          <Image
-            source={require('../image/logo.png')}
-            style={styles.bottomImage}
-          />
+          <TouchableOpacity onPress={() => navigation.navigate('Home')}>
+            <Image
+              source={require('../image/logo.png')}
+              style={styles.bottomImage}
+            />
+          </TouchableOpacity>
         </View>
       </View>
     </SafeAreaView>

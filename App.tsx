@@ -48,6 +48,11 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen
+          name="Main"
+          component={Main}
+          options={{headerShown: false}}
+        />
         {/* <Stack.Screen
           name="ScanReceipt"
           component={ScanReceipt}
@@ -61,11 +66,6 @@ function App(): React.JSX.Element {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Main"
-          component={Main}
           options={{headerShown: false}}
         />
         {/* <Stack.Screen
