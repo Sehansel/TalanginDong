@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 
 import {useNavigation} from '@react-navigation/native';
@@ -25,6 +26,8 @@ function ViewItem(): React.JSX.Element {
     data: {items: {item: string; price: number}[]};
   } | null>(null);
 
+  const [numberOfPeople, setNumberOfPeople] = useState('2');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -40,8 +43,20 @@ function ViewItem(): React.JSX.Element {
       }
     };
 
+    const saveNumberOfPeople = async () => {
+      try {
+        await AsyncStorage.setItem(
+          'numberOfPeople',
+          JSON.stringify(numberOfPeople),
+        );
+      } catch (error: any) {
+        console.error('Error saving number of people', error.message)
+      }
+    };
+
+    saveNumberOfPeople();
     fetchData();
-  }, []);
+  }, [numberOfPeople]);
 
   const formatPrice = (price: number) => {
     return price.toLocaleString();
@@ -60,6 +75,11 @@ function ViewItem(): React.JSX.Element {
         console.error('Error updating AsyncStorage data', error.message);
       }
     }
+  };
+
+  const handleNumberChange = (text: string) => {
+    const parsedNumber = text.replace(/[^0-9]/g, '');
+    setNumberOfPeople(parsedNumber);
   };
 
   return (
@@ -100,6 +120,16 @@ function ViewItem(): React.JSX.Element {
             </View>
           ))}
       </ScrollView>
+      <View style={{marginBottom: '10%', alignItems: 'center'}}>
+        <Text style={{marginBottom: '5%'}}>Number of People</Text>
+        <TextInput
+          value={numberOfPeople}
+          onChangeText={handleNumberChange}
+          keyboardType="numeric"
+          style={{borderWidth: 1, borderColor: 'black', padding: 7}}
+          placeholder="2"
+        />
+      </View>
       <View>
         <TouchableOpacity
           style={styles.button}

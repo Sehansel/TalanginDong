@@ -13,6 +13,19 @@ import {useNavigation} from '@react-navigation/native';
 import {HomeScreenNavigationProp} from '../type';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+interface ScannedData {
+  data: {
+    items: {item: string; quantity: number; price: number}[];
+    summary: {
+      subtotal: number;
+      tax: number;
+      discount: number;
+      serviceCharge: number;
+      total: number;
+    };
+  };
+}
+
 function ScanReceipt(): React.JSX.Element {
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
@@ -21,29 +34,41 @@ function ScanReceipt(): React.JSX.Element {
     backgroundColor: 'white',
   };
 
-  const [scannedData, setScannedData] = useState<{
-    data: {items: {item: string; price: number}[]};
-  } | null>(null);
-
   const formatPrice = (price: number) => {
     return price.toLocaleString();
   };
+
+  const [scannedData, setScannedData] = useState<ScannedData | null>(null);
+  const [numberOfPeople, setNumberOfPeople] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const data = await AsyncStorage.getItem('scanData');
-        if (data) {
+        if (data !== null) {
           setScannedData(JSON.parse(data));
         }
-        if (!data) {
-          console.log('Cannot get data');
-        }
+        console.log(data);
       } catch (error: any) {
-        console.error('Error retrieving data', error.message);
+        console.error('Error fetching data from AsyncStorage:', error.message);
       }
     };
 
+    const getNumberOfPeople = async () => {
+      try {
+        const numberPeopleString = await AsyncStorage.getItem('numberOfPeople');
+
+        if (numberPeopleString !== null) {
+          const numberPeople = JSON.parse(numberPeopleString);
+          setNumberOfPeople(numberPeople);
+          console.log(numberPeople);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    getNumberOfPeople();
     fetchData();
   }, []);
 
@@ -51,43 +76,41 @@ function ScanReceipt(): React.JSX.Element {
     <SafeAreaView style={backgroundStyle}>
       <View style={styles.container}>
         <View style={styles.textContainer}>
-          <Text style={styles.titleText}>Split Bill</Text>
+          <Text style={styles.titleText}>Overview</Text>
           <Text style={styles.subTitleText}>
-            Here is an overview of all the products we found on the receipt
+            Here is the amount needed to be payed by each person
           </Text>
-        </View>
-        <View style={styles.tableHeaderContainer}>
-          <Text style={(styles.tableHeader, styles.productColumn)}>
-            Product
-          </Text>
-          <Text style={(styles.tableHeader, styles.otherColumn)}>Edit</Text>
-          <Text style={(styles.tableHeader, styles.otherColumn)}>Delete</Text>
         </View>
       </View>
       <View style={styles.separator} />
-      <ScrollView style={styles.scrollView}>
-        {scannedData && scannedData.data.items.map((item, index) => (
-            <View style={styles.tableRow} key={index}>
-              <View style={styles.productColumn}>
-                <Text style={styles.tableData}>{item.item}</Text>
-                <Text style={styles.price}>Rp.{formatPrice(item.price)}</Text>
-              </View>
-              <Image
-                source={require('../image/edit.jpg')}
-                style={[styles.editDeleteButton, styles.otherColumn]}
-              />
-              <Image
-                source={require('../image/delete.jpg')}
-                style={[styles.editDeleteButton, styles.otherColumn]}
-              />
-            </View>
-          ))}
-      </ScrollView>
+      {scannedData && (
+        <View style={styles.scrollView}>
+          <Text style={styles.text}>
+            Before Tax: Rp.{formatPrice(scannedData.data.summary.subtotal)}
+          </Text>
+          <Text style={styles.text}>
+            Tax: Rp.{formatPrice(scannedData.data.summary.tax)}
+          </Text>
+          <Text style={styles.text}>
+            Service Charge: Rp.{formatPrice(scannedData.data.summary.serviceCharge)}
+          </Text>
+          <Text style={styles.text}>
+            Total: Rp.{formatPrice(scannedData.data.summary.total)}
+          </Text>
+
+          {numberOfPeople !== '' && (
+            <Text style={styles.text}>
+              Amount Owed Per Person: Rp.
+              {formatPrice(scannedData.data.summary.total / numberOfPeople)}
+            </Text>
+          )}
+        </View>
+      )}
       <View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('ViewItem')}>
-          <Text style={styles.buttonText}>Divide Bill</Text>
+          onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.buttonText}>Finish</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.bottomContainer}>
@@ -198,6 +221,13 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  text: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: 'black',
+    marginTop: '10%',
+    fontWeight: 'bold',
   },
 });
 
