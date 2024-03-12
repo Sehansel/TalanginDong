@@ -1,16 +1,8 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import type {PropsWithChildren} from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
@@ -21,16 +13,10 @@ import {
   Modal,
 } from 'react-native';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import { useNavigation } from '@react-navigation/native';
-import { HomeScreenNavigationProp, HomeStackNavigationParamList } from '../type';
+import {useNavigation} from '@react-navigation/native';
+import {HomeScreenNavigationProp} from '../type';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -63,7 +49,6 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function Login(): React.JSX.Element {
-
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [modalVisible, setModalVisible] = React.useState(false);
@@ -77,30 +62,40 @@ function Login(): React.JSX.Element {
   };
 
   const loginHandler = async () => {
-    try{
+    try {
       if (!email || !password) {
         return;
       }
-      const response = await fetch('https://talangindong-api.icarusphantom.dev/v1/auth/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-      });
+
+      const response = await fetch(
+        'https://talangindong-api.icarusphantom.dev/v1/auth/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email, password}),
+        },
+      );
 
       if (!response.ok) {
         throw new Error('Failed to log in');
       }
-      
+
+      const responseData = await response.json();
+
+      const token = responseData.data.token;
+
+      await AsyncStorage.setItem('token', token);
+
       navigation.navigate('Home');
-    } 
-    catch (error: any) {
-        setModalVisible(true);
+    } catch (error: any) {
+      console.error('Error retrieving token:', error.message);
+      setModalVisible(true);
     }
   };
 
-  const navigation = useNavigation<HomeScreenNavigationProp>()
+  const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -112,8 +107,7 @@ function Login(): React.JSX.Element {
   return (
     <SafeAreaView style={backgroundStyle}>
       <View style={styles.sectionContainer}>
-        <Section title="Log In">
-        </Section>
+        <Section title="Log In" />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
@@ -125,14 +119,14 @@ function Login(): React.JSX.Element {
         />
       </View>
       <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#888"
-            value={password}
-            onChangeText={handlePasswordChange}
-            secureTextEntry={true}
-          />
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#888"
+          value={password}
+          onChangeText={handlePasswordChange}
+          secureTextEntry={true}
+        />
       </View>
       <View style={styles.buttonContainer}>
         <Button title="Login" onPress={loginHandler} />
@@ -147,10 +141,12 @@ function Login(): React.JSX.Element {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text>Login Failed</Text>
-            <Button title="OK" onPress={() => 
-            {
-              setModalVisible(false);
-            }} />
+            <Button
+              title="OK"
+              onPress={() => {
+                setModalVisible(false);
+              }}
+            />
           </View>
         </View>
       </Modal>
@@ -158,13 +154,11 @@ function Login(): React.JSX.Element {
         <Text>
           Don't have an account? Tap{' '}
           <TouchableOpacity onPress={() => navigation.navigate('Register')}>
-            <Text style={{ color: 'blue', marginTop: 50}}>Register</Text>
+            <Text style={{color: 'blue', marginTop: 50}}>Register</Text>
           </TouchableOpacity>{' '}
           to register an account.
         </Text>
       </View>
-        
-        
     </SafeAreaView>
   );
 }
@@ -217,14 +211,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
-    elevation: 5, 
+    elevation: 5,
   },
 });
 

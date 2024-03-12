@@ -1,37 +1,20 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React from 'react';
 import type {PropsWithChildren} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
   useColorScheme,
   View,
   TextInput,
   Button,
-  TouchableOpacity,
-  Image,
   BackHandler,
   Modal,
 } from 'react-native';
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
-import { useNavigation } from '@react-navigation/native';
-import { HomeScreenNavigationProp, HomeStackNavigationParamList } from '../type';
+import {useNavigation} from '@react-navigation/native';
+import {HomeScreenNavigationProp} from '../type';
 
 type SectionProps = PropsWithChildren<{
   title: string;
@@ -64,7 +47,6 @@ function Section({children, title}: SectionProps): React.JSX.Element {
 }
 
 function Register(): React.JSX.Element {
-
   const navigation = useNavigation<HomeScreenNavigationProp>();
 
   const [email, setEmail] = React.useState('');
@@ -85,7 +67,7 @@ function Register(): React.JSX.Element {
     const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text);
 
     setEmailError(isValid ? '' : 'Invalid email address');
-    
+
     setEmail(text);
   };
 
@@ -96,37 +78,39 @@ function Register(): React.JSX.Element {
     const hasLowercase = /[a-z]/.test(text);
     const hasNumber = /\d/.test(text);
 
-  setPasswordError(
-    !isLengthValid
-      ? 'Password must be at least 6 characters long'
-      : !hasUppercase || !hasLowercase
-      ? 'Password must contain both uppercase and lowercase letters'
-      : !hasNumber
-      ? 'Password must contain at least one number'
-      : ''
-  );
+    setPasswordError(
+      !isLengthValid
+        ? 'Password must be at least 6 characters long'
+        : !hasUppercase || !hasLowercase
+        ? 'Password must contain both uppercase and lowercase letters'
+        : !hasNumber
+        ? 'Password must contain at least one number'
+        : '',
+    );
     setPassword(text);
   };
 
   const handleRegister = async () => {
-    try{
+    try {
       if (emailError || passwordError) {
         return;
       }
-      const response = await fetch('https://talangindong-api.icarusphantom.dev/v1/auth/signup', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        'https://talangindong-api.icarusphantom.dev/v1/auth/register',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({email, password}),
+        },
+      );
 
       if (!response.ok) {
         throw new Error('Failed to register user');
       }
       setModalVisible(true);
-    }
-    catch (error :any) {
+    } catch (error: any) {
       console.error('Error registering user:', error.message);
     }
   };
@@ -136,8 +120,8 @@ function Register(): React.JSX.Element {
       'hardwareBackPress',
       () => {
         navigation.goBack();
-        return true; 
-      }
+        return true;
+      },
     );
 
     return () => backHandler.remove();
@@ -146,8 +130,7 @@ function Register(): React.JSX.Element {
   return (
     <SafeAreaView style={backgroundStyle}>
       <View style={styles.sectionContainer}>
-        <Section title="Register">
-        </Section>
+        <Section title="Register" />
       </View>
       <View style={styles.inputContainer}>
         <TextInput
@@ -160,18 +143,18 @@ function Register(): React.JSX.Element {
         {!!emailError && <Text style={styles.error}>{emailError}</Text>}
       </View>
       <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="Password"
-            placeholderTextColor="#888"
-            value={password}
-            onChangeText={handlePasswordChange}
-            secureTextEntry={true}
-          />
-          {!!passwordError && <Text style={styles.error}>{passwordError}</Text>}
+        <TextInput
+          style={styles.input}
+          placeholder="Password"
+          placeholderTextColor="#888"
+          value={password}
+          onChangeText={handlePasswordChange}
+          secureTextEntry={true}
+        />
+        {!!passwordError && <Text style={styles.error}>{passwordError}</Text>}
       </View>
       <View style={styles.buttonContainer}>
-        <Button title="Register" onPress={handleRegister}/>
+        <Button title="Register" onPress={handleRegister} />
       </View>
       <Modal
         animationType="slide"
@@ -183,11 +166,13 @@ function Register(): React.JSX.Element {
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
             <Text>User registered successfully!</Text>
-            <Button title="OK" onPress={() => 
-            {
-              setModalVisible(false);
-              navigation.navigate('Login');
-            }} />
+            <Button
+              title="OK"
+              onPress={() => {
+                setModalVisible(false);
+                navigation.navigate('Login');
+              }}
+            />
           </View>
         </View>
       </Modal>
@@ -248,14 +233,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)', 
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContent: {
     backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',
-    elevation: 5, 
+    elevation: 5,
   },
 });
 
