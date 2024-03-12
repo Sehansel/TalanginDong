@@ -48,6 +48,11 @@ function App(): React.JSX.Element {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        {/* <Stack.Screen
+          name="ScanReceipt"
+          component={ScanReceipt}
+          options={{headerShown: false}}
+        /> */}
         <Stack.Screen
           name="ViewItem"
           component={ViewItem}

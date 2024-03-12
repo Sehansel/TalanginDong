@@ -40,6 +40,7 @@ function ScanReceipt(): React.JSX.Element {
 
   const [scannedData, setScannedData] = useState<ScannedData | null>(null);
   const [numberOfPeople, setNumberOfPeople] = useState('');
+  const [discount, setDiscount] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,7 +49,6 @@ function ScanReceipt(): React.JSX.Element {
         if (data !== null) {
           setScannedData(JSON.parse(data));
         }
-        console.log(data);
       } catch (error: any) {
         console.error('Error fetching data from AsyncStorage:', error.message);
       }
@@ -61,13 +61,26 @@ function ScanReceipt(): React.JSX.Element {
         if (numberPeopleString !== null) {
           const numberPeople = JSON.parse(numberPeopleString);
           setNumberOfPeople(numberPeople);
-          console.log(numberPeople);
         }
       } catch (error) {
         console.error('Error retrieving data from AsyncStorage:', error);
       }
     };
 
+    const getDiscount = async () => {
+      try {
+        const discountString = await AsyncStorage.getItem('discount');
+
+        if (discountString !== null) {
+          const discountAmount = JSON.parse(discountString);
+          setDiscount(discountAmount);
+        }
+      } catch (error) {
+        console.error('Error retrieving data from AsyncStorage:', error);
+      }
+    };
+
+    getDiscount();
     getNumberOfPeople();
     fetchData();
   }, []);
@@ -93,6 +106,12 @@ function ScanReceipt(): React.JSX.Element {
           </Text>
           <Text style={styles.text}>
             Service Charge: Rp.{formatPrice(scannedData.data.summary.serviceCharge)}
+          </Text>
+          <Text style={styles.text}>
+            Discount: Rp.
+            {formatPrice(
+              Math.ceil(scannedData.data.summary.subtotal * (discount / 100)),
+            )}
           </Text>
           <Text style={styles.text}>
             Total: Rp.{formatPrice(scannedData.data.summary.total)}

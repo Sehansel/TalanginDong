@@ -23,10 +23,19 @@ function ViewItem(): React.JSX.Element {
   };
 
   const [scannedData, setScannedData] = useState<{
-    data: {items: {item: string; price: number}[]};
+    data: {
+      items: {item: string; price: number}[];
+      summary: {
+        subtotal: number;
+        tax: number;
+        serviceCharge: number;
+        total: number;
+      };
+    };
   } | null>(null);
 
   const [numberOfPeople, setNumberOfPeople] = useState('2');
+  const [discount, setDiscount] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,13 +59,22 @@ function ViewItem(): React.JSX.Element {
           JSON.stringify(numberOfPeople),
         );
       } catch (error: any) {
-        console.error('Error saving number of people', error.message)
+        console.error('Error saving number of people', error.message);
       }
     };
 
+    const saveDiscount = async () => {
+      try {
+        await AsyncStorage.setItem('discount', JSON.stringify(discount));
+      } catch (error: any) {
+        console.error('Error saving discount', error.message);
+      }
+    };
+
+    saveDiscount();
     saveNumberOfPeople();
     fetchData();
-  }, [numberOfPeople]);
+  }, [numberOfPeople, discount]);
 
   const formatPrice = (price: number) => {
     return price.toLocaleString();
@@ -65,11 +83,38 @@ function ViewItem(): React.JSX.Element {
   const deleteItem = async (index: number) => {
     if (scannedData) {
       const updatedItems = scannedData.data.items.filter((_, i) => i !== index);
-      setScannedData({...scannedData, data: {items: updatedItems}});
+      const subtotal = updatedItems.reduce((acc, item) => acc + item.price, 0);
+      const tax = subtotal * 0.11;
+      const serviceCharge = subtotal * 0.1;
+      const total = subtotal + tax + serviceCharge;
+
+      setScannedData({
+        ...scannedData,
+        data: {
+          items: updatedItems,
+          summary: {
+            subtotal,
+            tax,
+            serviceCharge,
+            total,
+          },
+        },
+      });
+
       try {
         await AsyncStorage.setItem(
           'scanData',
-          JSON.stringify({data: {items: updatedItems}}),
+          JSON.stringify({
+            data: {
+              items: updatedItems,
+              summary: {
+                subtotal,
+                tax,
+                serviceCharge,
+                total,
+              },
+            },
+          }),
         );
       } catch (error: any) {
         console.error('Error updating AsyncStorage data', error.message);
@@ -80,6 +125,11 @@ function ViewItem(): React.JSX.Element {
   const handleNumberChange = (text: string) => {
     const parsedNumber = text.replace(/[^0-9]/g, '');
     setNumberOfPeople(parsedNumber);
+  };
+
+  const handleDiscount = (text: string) => {
+    const pickNumber = text.replace(/[^0-9]/g, '');
+    setDiscount(pickNumber);
   };
 
   return (
@@ -120,13 +170,27 @@ function ViewItem(): React.JSX.Element {
             </View>
           ))}
       </ScrollView>
-      <View style={{marginBottom: '10%', alignItems: 'center'}}>
-        <Text style={{marginBottom: '5%'}}>Number of People</Text>
+      <View style={{marginBottom: '5%', alignItems: 'center'}}>
+        <Text style={{marginBottom: '5%', color: 'black', fontSize: 15}}>
+          Discount
+        </Text>
+        <TextInput
+          value={discount}
+          onChangeText={handleDiscount}
+          keyboardType="numeric"
+          style={{borderWidth: 1, borderColor: 'black', padding: 4, textAlign: 'center'}}
+          placeholder="Enter Discount"
+        />
+      </View>
+      <View style={{marginBottom: '5%', alignItems: 'center'}}>
+        <Text style={{marginBottom: '5%', color: 'black', fontSize: 15}}>
+          Number of People
+        </Text>
         <TextInput
           value={numberOfPeople}
           onChangeText={handleNumberChange}
           keyboardType="numeric"
-          style={{borderWidth: 1, borderColor: 'black', padding: 7}}
+          style={{borderWidth: 1, borderColor: 'black', padding: 3, textAlign: 'center'}}
           placeholder="2"
         />
       </View>
