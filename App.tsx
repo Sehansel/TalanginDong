@@ -1,106 +1,21 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
+import '@expo/metro-runtime';
+import { StatusBar } from 'expo-status-bar';
+import { StyleSheet, Text, View } from 'react-native';
 
-import React from 'react';
-import type {PropsWithChildren} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
-
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Register from './screens/Register';
-import Login from './screens/Login';
-import Main from './screens/Main';
-import Home from './screens/Home';
-import ScanReceipt from './screens/ScanReceipt';
-import ViewItem from './screens/ViewItems';
-import DivideItem from './screens/DivideItem';
-import {HomeStackNavigationParamList} from './type';
-
-const Stack = createNativeStackNavigator<HomeStackNavigationParamList>();
-
-function App(): React.JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
+export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen
-          name="Main"
-          component={Main}
-          options={{headerShown: false}}
-        />
-        {/* <Stack.Screen
-          name="ScanReceipt"
-          component={ScanReceipt}
-          options={{headerShown: false}}
-        /> */}
-        <Stack.Screen
-          name="ViewItem"
-          component={ViewItem}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{headerShown: false}}
-        />
-        {/* <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{headerShown: false}}
-        /> */}
-        <Stack.Screen
-          name="Login"
-          component={Login}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="Register"
-          component={Register}
-          options={{headerShown: false}}
-        />
-        <Stack.Screen
-          name="ScanReceipt"
-          component={ScanReceipt}
-          options={{headerShown: false}}
-        />
-        {/* <Stack.Screen
-          name="ViewItem"
-          component={ViewItem}
-          options={{headerShown: false}}
-        /> */}
-        <Stack.Screen
-          name="DivideItem"
-          component={DivideItem}
-          options={{headerShown: false}}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <View style={styles.container}>
+      <Text>Open up App.tsx to start working on your app!</Text>
+      <StatusBar style="auto" />
+    </View>
   );
 }
 
-export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});
