@@ -1,21 +1,12 @@
 import '@expo/metro-runtime';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as SplashScreen from 'expo-splash-screen';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
+import App from './src/app';
+
+SplashScreen.preventAutoHideAsync();
+
+function TalanginDongApp() {
+  return <App hideSplashScreen={SplashScreen.hideAsync} />;
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default TalanginDongApp;
