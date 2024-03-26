@@ -2,14 +2,17 @@ import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 
 import AuthNavigator from './authNavigator';
-import { ROUTES } from '../constants';
 
-const Stack = createStackNavigator();
+export type AppNavigatorParamList = {
+  AuthNavigator: undefined;
+};
+
+const Stack = createStackNavigator<AppNavigatorParamList>();
 
 function AppNavigator() {
   return (
-    <Stack.Navigator initialRouteName={ROUTES.AUTH_NAVIGATOR}>
-      <Stack.Screen name={ROUTES.AUTH_NAVIGATOR} component={AuthNavigator} />
+    <Stack.Navigator initialRouteName="AuthNavigator">
+      <Stack.Screen name="AuthNavigator" component={AuthNavigator} />
     </Stack.Navigator>
   );
 }
