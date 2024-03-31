@@ -8,7 +8,7 @@ import { ConfigPlugin, withAppBuildGradle, withMainApplication } from 'expo/conf
  *   1) Remove the dependency from app/build.gradle
  *   2) Remove ReactNativeFlipper initialization from MainApplication.kt
  */
-export const withFlipperDisabled: ConfigPlugin = config => {
+export const withFlipperDisabled: ConfigPlugin = (config) => {
   config = withAppBuildGradleMod(config);
   config = withMainApplicationKtMod(config);
   return config;
@@ -25,8 +25,8 @@ const FIND_FLIPPER_IMPORT = 'import com.facebook.react.flipper.ReactNativeFlippe
  *
  * implementation 'com.facebook.flipper:flipper:${FLIPPER_VERSION}'
  */
-const withAppBuildGradleMod: ConfigPlugin = config =>
-  withAppBuildGradle(config, modConfig => {
+const withAppBuildGradleMod: ConfigPlugin = (config) =>
+  withAppBuildGradle(config, (modConfig) => {
     if (modConfig.modResults.contents.includes(FLIPPER_DEPENDENCY)) {
       modConfig.modResults.contents = modConfig.modResults.contents.replace(FLIPPER_DEPENDENCY, '');
     }
@@ -39,8 +39,8 @@ const withAppBuildGradleMod: ConfigPlugin = config =>
  *     ReactNativeFlipper.initializeFlipper(this, reactNativeHost.reactInstanceManager)
  * }
  */
-const withMainApplicationKtMod: ConfigPlugin = config =>
-  withMainApplication(config, modConfig => {
+const withMainApplicationKtMod: ConfigPlugin = (config) =>
+  withMainApplication(config, (modConfig) => {
     if (modConfig.modResults.contents.includes(FIND_FLIPPER_IMPORT)) {
       modConfig.modResults.contents = modConfig.modResults.contents.replace(
         FIND_FLIPPER_IMPORT,

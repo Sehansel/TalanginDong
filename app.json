@@ -40,7 +40,8 @@
         "image": "./src/assets/images/splash.png",
         "resizeMode": "contain",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "softwareKeyboardLayoutMode": "pan"
     },
     "web": {
       "favicon": "./src/assets/images/favicon.png",

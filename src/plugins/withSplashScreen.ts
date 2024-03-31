@@ -14,7 +14,7 @@ import {
  *   1) Replace the default splash screen with a transparent screen
  *   2) Set the splash screen status bar to translucent
  */
-export const withSplashScreen: ConfigPlugin = config => {
+export const withSplashScreen: ConfigPlugin = (config) => {
   config = withAndroidSplashScreen(config);
   return config;
 };
@@ -25,7 +25,7 @@ export const withSplashScreen: ConfigPlugin = config => {
  * function into parts by platform. For example, if it was needed, we would also
  * add `withIosSplashScreen` for the iOS implementation.
  */
-const withAndroidSplashScreen: ConfigPlugin = config => {
+const withAndroidSplashScreen: ConfigPlugin = (config) => {
   config = withCustomStylesXml(config);
   config = withCustomStringsXml(config);
   return config;
@@ -36,8 +36,8 @@ const withAndroidSplashScreen: ConfigPlugin = config => {
  *
  * <string name="expo_splash_screen_status_bar_translucent" translatable="false">true</string>
  */
-const withCustomStringsXml: ConfigPlugin = config =>
-  withStringsXml(config, modConfig => {
+const withCustomStringsXml: ConfigPlugin = (config) =>
+  withStringsXml(config, (modConfig) => {
     modConfig.modResults = AndroidConfig.Strings.setStringItem(
       [
         {
@@ -59,8 +59,8 @@ const withCustomStringsXml: ConfigPlugin = config =>
  *
  * <item name="android:windowIsTranslucent">true</item>
  */
-const withCustomStylesXml: ConfigPlugin = config =>
-  withAndroidStyles(config, async modConfig => {
+const withCustomStylesXml: ConfigPlugin = (config) =>
+  withAndroidStyles(config, async (modConfig) => {
     modConfig.modResults = AndroidConfig.Styles.assignStylesValue(modConfig.modResults, {
       add: true,
       name: 'android:windowIsTranslucent',

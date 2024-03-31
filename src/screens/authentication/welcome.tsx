@@ -15,19 +15,19 @@ export const WelcomeScreen: React.FC<IWelcomeProps> = function WelcomeScreen(pro
   const { navigation } = props;
 
   return (
-    <>
-      <View style={styles.container}>
-        <View style={styles.iconContainer}>
-          <Image style={styles.icon} source={require('../../assets/images/adaptive-icon.png')} />
-        </View>
-        <Text style={styles.title}>TalanginDong</Text>
-        <Text style={styles.description}>You & friends do the fun, we do the math.</Text>
-        <Image
-          style={styles.welcomeImage}
-          source={require('../../assets/images/welcome-image.png')}
-        />
+    <View style={styles.container}>
+      <View style={styles.iconContainer}>
+        <Image style={styles.icon} source={require('../../assets/images/adaptive-icon.png')} />
+      </View>
+      <Text style={styles.title}>TalanginDong</Text>
+      <Text style={styles.description}>You & friends do the fun, we do the math.</Text>
+      <Image
+        style={styles.welcomeImage}
+        source={require('../../assets/images/welcome-image.png')}
+      />
+      <View style={styles.buttonContainer}>
         <Button
-          mode="outlined"
+          mode='outlined'
           theme={{ colors: { outline: COLOR.PRIMARY } }}
           textColor={COLOR.PRIMARY}
           style={styles.button}
@@ -36,16 +36,16 @@ export const WelcomeScreen: React.FC<IWelcomeProps> = function WelcomeScreen(pro
         </Button>
         <Text style={styles.orText}>-or-</Text>
         <Button
-          mode="contained"
+          mode='contained'
           buttonColor={COLOR.PRIMARY}
-          textColor="white"
+          textColor='white'
           style={styles.button}
           onPress={() => navigation.navigate('Register')}>
           Create Account
         </Button>
-        <StatusBar style="auto" />
       </View>
-    </>
+      <StatusBar style='auto' />
+    </View>
   );
 };
 
@@ -93,5 +93,11 @@ const styles = StyleSheet.create({
   button: {
     width: 175,
     height: 40,
+  },
+  buttonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+    rowGap: 10,
   },
 });

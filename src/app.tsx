@@ -1,9 +1,10 @@
 import { NavigationContainer } from '@react-navigation/native';
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
 
-import AuthNavigator from './navigations/authNavigator';
+import { AuthNavigator } from './navigations/authNavigator';
 
 interface AppProps {
   hideSplashScreen: () => Promise<boolean>;
@@ -23,7 +24,9 @@ function App(props: AppProps): JSX.Element {
     <NavigationContainer>
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <GestureHandlerRootView style={{ flex: 1 }}>
-          <AuthNavigator />
+          <KeyboardProvider>
+            <AuthNavigator />
+          </KeyboardProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
     </NavigationContainer>
