@@ -23,3 +23,13 @@ export const register = function register(username: string, email: string, passw
     },
   });
 };
+
+export const refreshToken = function refreshToken(refreshToken: string) {
+  return request({
+    method: 'POST',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/auth/refresh-token`,
+    data: {
+      refreshToken,
+    },
+  });
+};

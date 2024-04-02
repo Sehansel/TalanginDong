@@ -5,7 +5,6 @@ export const AuthenticationStoreModel = types
   .props({
     authToken: types.maybe(types.string),
     authRefreshToken: types.maybe(types.string),
-    authEmail: types.maybe(types.string),
   })
   .views((store) => ({
     get token() {
@@ -25,17 +24,13 @@ export const AuthenticationStoreModel = types
     setAuthRefreshToken(value?: string) {
       store.authRefreshToken = value;
     },
-    setBothAuthToken(authToken: string, authRefreshToken: string) {
+    setBothAuthToken(authToken?: string, authRefreshToken?: string) {
       store.authToken = authToken;
       store.authRefreshToken = authRefreshToken;
-    },
-    setAuthEmail(value: string) {
-      store.authEmail = value.replace(/ /g, '');
     },
     logout() {
       store.authToken = undefined;
       store.authRefreshToken = undefined;
-      store.authEmail = undefined;
     },
   }));
 
