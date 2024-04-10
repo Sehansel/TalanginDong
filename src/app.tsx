@@ -41,8 +41,9 @@ export const App = observer(function App(props: AppProps) {
           await SecureStore.setItemAsync(STORAGE_KEY.TOKEN, response.data.data.token);
           setBothAuthToken(response.data.data.token, refreshToken);
         }
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error: any) {
-        console.log(error);
+        // should not log any error in here
       }
     }
     setTimeout(hideSplashScreen, 500);
