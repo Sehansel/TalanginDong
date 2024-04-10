@@ -69,18 +69,18 @@
     json5 "^2.2.3"
     semver "^6.3.1"
 
-"@babel/core@^7.24.3":
-  version "7.24.3"
-  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.24.3.tgz#568864247ea10fbd4eff04dda1e05f9e2ea985c3"
-  integrity sha512-5FcvN1JHw2sHJChotgx8Ek0lyuh4kCKelgMTTqhYJJtloNvUfpAFMeNQUtdlIaktwrSV9LtCdqwk48wL2wBacQ==
+"@babel/core@^7.24.4":
+  version "7.24.4"
+  resolved "https://registry.yarnpkg.com/@babel/core/-/core-7.24.4.tgz#1f758428e88e0d8c563874741bc4ffc4f71a4717"
+  integrity sha512-MBVlMXP+kkl5394RBLSxxk/iLTeVGuXTV3cIDXavPpMMqnSnt6apKgan/U8O3USWZCWZT/TbgfEpKa4uMgN4Dg==
   dependencies:
     "@ampproject/remapping" "^2.2.0"
     "@babel/code-frame" "^7.24.2"
-    "@babel/generator" "^7.24.1"
+    "@babel/generator" "^7.24.4"
     "@babel/helper-compilation-targets" "^7.23.6"
     "@babel/helper-module-transforms" "^7.23.3"
-    "@babel/helpers" "^7.24.1"
-    "@babel/parser" "^7.24.1"
+    "@babel/helpers" "^7.24.4"
+    "@babel/parser" "^7.24.4"
     "@babel/template" "^7.24.0"
     "@babel/traverse" "^7.24.1"
     "@babel/types" "^7.24.0"
@@ -104,6 +104,16 @@
   version "7.24.1"
   resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.24.1.tgz#e67e06f68568a4ebf194d1c6014235344f0476d0"
   integrity sha512-DfCRfZsBcrPEHUfuBMgbJ1Ut01Y/itOs+hY2nFLgqsqXd52/iSiVq5TITtUasIUgm+IIKdY2/1I7auiQOEeC9A==
+  dependencies:
+    "@babel/types" "^7.24.0"
+    "@jridgewell/gen-mapping" "^0.3.5"
+    "@jridgewell/trace-mapping" "^0.3.25"
+    jsesc "^2.5.1"
+
+"@babel/generator@^7.24.4":
+  version "7.24.4"
+  resolved "https://registry.yarnpkg.com/@babel/generator/-/generator-7.24.4.tgz#1fc55532b88adf952025d5d2d1e71f946cb1c498"
+  integrity sha512-Xd6+v6SnjWVx/nus+y0l1sxMOTOMBkyL4+BIdbALyatQnAe/SRVjANeDPSCYaX+i1iJmuGSKf3Z+E+V/va1Hvw==
   dependencies:
     "@babel/types" "^7.24.0"
     "@jridgewell/gen-mapping" "^0.3.5"
@@ -334,10 +344,10 @@
     "@babel/traverse" "^7.24.0"
     "@babel/types" "^7.24.0"
 
-"@babel/helpers@^7.24.1":
-  version "7.24.1"
-  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.24.1.tgz#183e44714b9eba36c3038e442516587b1e0a1a94"
-  integrity sha512-BpU09QqEe6ZCHuIHFphEFgvNSrubve1FtyMton26ekZ85gRGi6LrTF7zArARp2YvyFxloeiRmtSCq5sjh1WqIg==
+"@babel/helpers@^7.24.4":
+  version "7.24.4"
+  resolved "https://registry.yarnpkg.com/@babel/helpers/-/helpers-7.24.4.tgz#dc00907fd0d95da74563c142ef4cd21f2cb856b6"
+  integrity sha512-FewdlZbSiwaVGlgT1DPANDuCHaDMiOo+D/IDYRFYjHOuv66xMSJ7fQwwODwRNAPkADIO/z1EoF/l2BCWlWABDw==
   dependencies:
     "@babel/template" "^7.24.0"
     "@babel/traverse" "^7.24.1"
@@ -371,6 +381,11 @@
   version "7.24.1"
   resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.24.1.tgz#1e416d3627393fab1cb5b0f2f1796a100ae9133a"
   integrity sha512-Zo9c7N3xdOIQrNip7Lc9wvRPzlRtovHVE4lkz8WEDr7uYh/GMQhSiIgFxGIArRHYdJE5kxtZjAf8rT0xhdLCzg==
+
+"@babel/parser@^7.24.4":
+  version "7.24.4"
+  resolved "https://registry.yarnpkg.com/@babel/parser/-/parser-7.24.4.tgz#234487a110d89ad5a3ed4a8a566c36b9453e8c88"
+  integrity sha512-zTvEBcghmeBma9QIGunWevvBAp4/Qu9Bdq+2k0Ot4fVMD6v3dsC9WOcRSKk7tRRyBM/53yKMJko9xOatGQAwSg==
 
 "@babel/plugin-bugfix-safari-id-destructuring-collision-in-function-expression@^7.23.3":
   version "7.23.3"
@@ -2450,10 +2465,10 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.11.tgz#2596fb352ee96a1379c657734d4b913a613ad563"
   integrity sha512-ga8y9v9uyeiLdpKddhxYQkxNDrfvuPrlFb0N1qnZZByvcElJaXthF1UhvCh9TLWJBEHeNtdnbysW7Y6Uq8CVng==
 
-"@types/react@~18.2.73":
-  version "18.2.73"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.73.tgz#0579548ad122660d99e00499d22e33b81e73ed94"
-  integrity sha512-XcGdod0Jjv84HOC7N5ziY3x+qL0AfmubvKOZ9hJjJ2yd5EE+KYjWhdOjt387e9HPheHkdggF9atTifMRtyAaRA==
+"@types/react@~18.2.75":
+  version "18.2.75"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-18.2.75.tgz#45d18f384939306d35312def1bf532eb38a68562"
+  integrity sha512-+DNnF7yc5y0bHkBTiLKqXFe+L4B3nvOphiMY3tuA5X10esmjqk7smyBZzbGTy2vsiy/Bnzj8yFIBL8xhRacoOg==
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
@@ -4417,10 +4432,10 @@ expo-modules-autolinking@1.10.3:
     find-up "^5.0.0"
     fs-extra "^9.1.0"
 
-expo-modules-core@1.11.12:
-  version "1.11.12"
-  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.11.12.tgz#d5c7b3ed7ab57d4fb6885a0d8e10287dcf1ffe5f"
-  integrity sha512-/e8g4kis0pFLer7C0PLyx98AfmztIM6gU9jLkYnB1pU9JAfQf904XEi3bmszO7uoteBQwSL6FLp1m3TePKhDaA==
+expo-modules-core@1.11.13:
+  version "1.11.13"
+  resolved "https://registry.yarnpkg.com/expo-modules-core/-/expo-modules-core-1.11.13.tgz#a8e63ad844e966dce78dea40b50839af6c3bc518"
+  integrity sha512-2H5qrGUvmLzmJNPDOnovH1Pfk5H/S/V0BifBmOQyDc9aUh9LaDwkqnChZGIXv8ZHDW8JRlUW0QqyWxTggkbw1A==
   dependencies:
     invariant "^2.2.4"
 
@@ -4446,10 +4461,10 @@ expo-updates-interface@~0.15.1:
   resolved "https://registry.yarnpkg.com/expo-updates-interface/-/expo-updates-interface-0.15.3.tgz#cdee536dea0a8692833a4d074005bf9c6bbbdd99"
   integrity sha512-uLvsbaCmUsXgJqeen8rYH/jPr874ZUCXEvWpKHxrCv5/XATPlYEaDuecbNSGQ+cu78i6MdtB4BHOwZmoH2d47A==
 
-expo@~50.0.14:
-  version "50.0.14"
-  resolved "https://registry.yarnpkg.com/expo/-/expo-50.0.14.tgz#ddcae86aa0ba8d1be3da9ad1bdda23fa539dc97d"
-  integrity sha512-yLPdxCMVAbmeEIpzzyAuJ79wvr6ToDDtQmuLDMAgWtjqP8x3CGddXxUe07PpKEQgzwJabdHvCLP5Bv94wMFIjQ==
+expo@~50.0.15:
+  version "50.0.15"
+  resolved "https://registry.yarnpkg.com/expo/-/expo-50.0.15.tgz#18c5c3ee0125fd42fe828b6791410eed68f7e74a"
+  integrity sha512-tsyRmMHjA8lPlM7AsqH1smSH8hzmn1+x/vsP+xgbKYJTGtYccdY/wsm6P84VJWeK5peWSVqrWNos+YuPqXKLSQ==
   dependencies:
     "@babel/runtime" "^7.20.0"
     "@expo/cli" "0.17.8"
@@ -4463,7 +4478,7 @@ expo@~50.0.14:
     expo-font "~11.10.3"
     expo-keep-awake "~12.8.2"
     expo-modules-autolinking "1.10.3"
-    expo-modules-core "1.11.12"
+    expo-modules-core "1.11.13"
     fbemitter "^3.0.0"
     whatwg-url-without-unicode "8.0.0-3"
 
@@ -7015,10 +7030,10 @@ react-native-gesture-handler@~2.16.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
-react-native-keyboard-controller@^1.11.5:
-  version "1.11.5"
-  resolved "https://registry.yarnpkg.com/react-native-keyboard-controller/-/react-native-keyboard-controller-1.11.5.tgz#480fb0093e421f6947e302c9dd31bf8e349bc1e0"
-  integrity sha512-AtlJVz+Sm9uh5Y+k0AhqJDVnbpYkieOE+qHwO8046Fyt9blxK5pGprOQLNy9hcJjfxwhiwiSFk9VyZlZfaYe6Q==
+react-native-keyboard-controller@^1.11.6:
+  version "1.11.6"
+  resolved "https://registry.yarnpkg.com/react-native-keyboard-controller/-/react-native-keyboard-controller-1.11.6.tgz#4c9f2950f872a42745f32f46c21475cd1e4a7154"
+  integrity sha512-EFx17Uqccsf8jRqEJxqgTIwOdwSKLhA53qQ5Y6z9rvTO0q99/wQbq6F1otEE/oq27HlVGkYk1aYJ7U2nKrtqKw==
 
 react-native-paper@^5.12.3:
   version "5.12.3"
@@ -8141,10 +8156,10 @@ typed-array-length@^1.0.5:
     is-typed-array "^1.1.13"
     possible-typed-array-names "^1.0.0"
 
-typescript@^5.4.3:
-  version "5.4.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.4.3.tgz#5c6fedd4c87bee01cd7a528a30145521f8e0feff"
-  integrity sha512-KrPd3PKaCLr78MalgiwJnA25Nm8HAmdwN3mYUYZgG/wizIo9EainNVQI9/yDavtVFRN2h3k8uf3GLHuhDMgEHg==
+typescript@^5.4.4:
+  version "5.4.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.4.4.tgz#eb2471e7b0a5f1377523700a21669dce30c2d952"
+  integrity sha512-dGE2Vv8cpVvw28v8HCPqyb08EzbBURxDpuhJvTrusShUfGnhHBafDsLdS1EhhxyL6BJQE+2cT3dDPAv+MQ6oLw==
 
 ua-parser-js@^1.0.35:
   version "1.0.37"
