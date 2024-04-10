@@ -3,9 +3,9 @@ import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, Image, Alert } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { Button, HelperText } from 'react-native-paper';
+import { Button, HelperText, Snackbar } from 'react-native-paper';
 import { STORAGE_KEY } from 'src/constants';
 import { useStores } from 'src/models';
 
@@ -36,6 +36,10 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
     },
     isSubmited: false,
     loading: false,
+    snackbar: {
+      value: '',
+      visible: false,
+    },
     setEmail(text: string) {
       this.email.value = text;
       this.email.isInvalid = false;
@@ -86,6 +90,14 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
     setLoading(state: boolean) {
       this.loading = state;
     },
+    setSnackbar(text: string) {
+      this.snackbar.value = text;
+      this.snackbar.visible = true;
+    },
+    hideSnackbar() {
+      this.snackbar.value = '';
+      this.snackbar.visible = false;
+    },
   }));
 
   async function submit() {
@@ -100,15 +112,15 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
         setBothAuthToken(response.data.data.token, response.data.data.refreshToken);
       } else {
         if (response.data.code === 'NOT_FOUND') {
-          Alert.alert('Error', 'Email or password is invalid');
+          authStore.setSnackbar('Email or password is invalid');
           authStore.setIsInvalid();
         } else {
-          Alert.alert('Error', 'Unknown Error');
+          authStore.setSnackbar('Unknown Error occured!');
         }
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
-      Alert.alert('Error', 'Unknown Error');
+      authStore.setSnackbar('Unknown Error occured!');
     }
     authStore.setLoading(false);
   }
@@ -179,6 +191,15 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
             <Text style={{ fontWeight: '600', fontSize: 20 }}>TalanginDong</Text>
           </View>
         </View>
+        <Snackbar
+          visible={authStore.snackbar.visible}
+          onDismiss={authStore.hideSnackbar}
+          action={{
+            label: 'Ok',
+          }}
+          theme={{ colors: { inversePrimary: COLOR.PRIMARY } }}>
+          {authStore.snackbar.value}
+        </Snackbar>
         <StatusBar style='auto' />
       </View>
     </KeyboardAwareScrollView>
