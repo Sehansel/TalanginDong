@@ -4,6 +4,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
+import { PaperProvider } from 'react-native-paper';
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { STORAGE_KEY } from './constants';
@@ -52,7 +53,9 @@ export const App = observer(function App(props: AppProps) {
       <SafeAreaProvider initialMetrics={initialWindowMetrics}>
         <GestureHandlerRootView style={{ flex: 1 }}>
           <KeyboardProvider>
-            <AppNavigator />
+            <PaperProvider>
+              <AppNavigator />
+            </PaperProvider>
           </KeyboardProvider>
         </GestureHandlerRootView>
       </SafeAreaProvider>
