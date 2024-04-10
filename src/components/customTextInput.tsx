@@ -11,11 +11,12 @@ interface ICustomTextInputProps {
   value?: string;
   onChangeText?: ((text: string) => void) & Function;
   error?: boolean;
+  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
 }
 
 export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
   function CustomTextInput(props) {
-    const { isSecureInput = false, label, value, onChangeText, error } = props;
+    const { isSecureInput = false, label, value, onChangeText, error, autoCapitalize } = props;
     const [isPasswordHidden, setIsPasswordHidden] = React.useState(true);
     return (
       <TextInput
@@ -24,6 +25,7 @@ export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
         value={value}
         onChangeText={onChangeText}
         secureTextEntry={isSecureInput ? isPasswordHidden : false}
+        autoCapitalize={autoCapitalize ? autoCapitalize : isSecureInput ? 'none' : 'sentences'}
         right={
           isSecureInput ? (
             <TextInput.Icon
