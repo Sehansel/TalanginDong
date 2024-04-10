@@ -1,13 +1,17 @@
 import { StackNavigationProp } from '@react-navigation/stack';
+import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image, Alert } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Button, HelperText } from 'react-native-paper';
+import { STORAGE_KEY } from 'src/constants';
+import { useStores } from 'src/models';
 
 import { CustomTextInput } from '../../components/customTextInput';
 import { AuthNavigatorParamList } from '../../navigations/authNavigator';
+import * as AuthService from '../../services/authService';
 import { COLOR } from '../../theme';
 
 interface ILoginProps {
@@ -16,44 +20,98 @@ interface ILoginProps {
 
 export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(props) {
   const { navigation } = props;
+  const {
+    authenticationStore: { setBothAuthToken },
+  } = useStores();
   const authStore = useLocalObservable(() => ({
-    email: '',
-    password: '',
+    email: {
+      value: '',
+      isError: false,
+      isInvalid: false,
+    },
+    password: {
+      value: '',
+      isError: false,
+      isInvalid: false,
+    },
     isSubmited: false,
     loading: false,
     setEmail(text: string) {
-      this.email = text;
+      this.email.value = text;
+      this.email.isInvalid = false;
+      this.password.isInvalid = false;
+      if (this.isSubmited) {
+        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
+          this.email.isError = true;
+        } else {
+          this.email.isError = false;
+        }
+        if (this.password.value.length === 0) {
+          this.password.isError = true;
+        } else {
+          this.password.isError = false;
+        }
+      }
     },
     setPassword(text: string) {
-      this.password = text;
+      this.password.value = text;
+      this.email.isInvalid = false;
+      this.password.isInvalid = false;
+      if (this.isSubmited) {
+        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
+          this.email.isError = true;
+        } else {
+          this.email.isError = false;
+        }
+        if (this.password.value.length === 0) {
+          this.password.isError = true;
+        } else {
+          this.password.isError = false;
+        }
+      }
+    },
+    setIsInvalid() {
+      this.email.isInvalid = true;
+      this.password.isInvalid = true;
     },
     setIsSubmited() {
       this.isSubmited = true;
+      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
+        this.email.isError = true;
+      }
+      if (this.password.value.length === 0) {
+        this.password.isError = true;
+      }
     },
     setLoading(state: boolean) {
       this.loading = state;
     },
   }));
 
-  function isEmailInvalid() {
-    return !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(authStore.email) && authStore.isSubmited;
-  }
-
-  function isPasswordInvalid() {
-    return authStore.password === '' && authStore.isSubmited;
-  }
-
-  function submit() {
+  async function submit() {
     authStore.setIsSubmited();
-    if (isEmailInvalid() || isPasswordInvalid()) return;
+    if (authStore.email.isError || authStore.password.isError) return;
     authStore.setLoading(true);
-    console.log('success');
-    setTimeout(() => {
-      authStore.setLoading(false);
-    }, 3000);
+    try {
+      const response = await AuthService.login(authStore.email.value, authStore.password.value);
+      if (response.ok) {
+        await SecureStore.setItemAsync(STORAGE_KEY.TOKEN, response.data.data.token);
+        await SecureStore.setItemAsync(STORAGE_KEY.REFRESH_TOKEN, response.data.data.refreshToken);
+        setBothAuthToken(response.data.data.token, response.data.data.refreshToken);
+      } else {
+        if (response.data.code === 'NOT_FOUND') {
+          Alert.alert('Error', 'Email or password is invalid');
+          authStore.setIsInvalid();
+        } else {
+          Alert.alert('Error', 'Unknown Error');
+        }
+      }
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (error: any) {
+      Alert.alert('Error', 'Unknown Error');
+    }
+    authStore.setLoading(false);
   }
-
-  console.log('Re render');
 
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flexGrow: 1 }}>
@@ -62,22 +120,28 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
           <Text style={styles.title}>Login</Text>
           <CustomTextInput
             label='Email'
-            value={authStore.email}
+            value={authStore.email.value}
             onChangeText={(text) => authStore.setEmail(text)}
-            error={isEmailInvalid()}
+            error={authStore.email.isError || authStore.email.isInvalid}
+            autoCapitalize='none'
           />
-          <HelperText style={{ alignSelf: 'flex-start' }} type='error' visible={isEmailInvalid()}>
+          <HelperText
+            style={{ alignSelf: 'flex-start' }}
+            type='error'
+            visible={authStore.email.isError || authStore.email.isInvalid}>
             Email is invalid!
           </HelperText>
           <CustomTextInput
             isSecureInput
             label='Password'
-            value={authStore.password}
+            value={authStore.password.value}
             onChangeText={(text) => authStore.setPassword(text)}
-            error={isPasswordInvalid()}
+            error={authStore.password.isError || authStore.password.isInvalid}
           />
           <View style={styles.forgotPasswordContainer}>
-            <HelperText type='error' visible={isPasswordInvalid()}>
+            <HelperText
+              type='error'
+              visible={authStore.password.isError || authStore.password.isInvalid}>
               Password is invalid!
             </HelperText>
             <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
@@ -104,7 +168,7 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              marginTop: 200,
+              marginTop: 222,
             }}>
             <View style={styles.iconContainer}>
               <Image
