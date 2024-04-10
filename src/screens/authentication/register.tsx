@@ -298,7 +298,8 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
               authStore.hideDialog();
               navigation.navigate('Login');
             }}>
-            <Dialog.Title>Success</Dialog.Title>
+            <Dialog.Icon size={45} color={COLOR.PRIMARY} icon='check-circle' />
+            <Dialog.Title style={{ textAlign: 'center' }}>Success</Dialog.Title>
             <Dialog.Content>
               <Text>
                 Your account has been registered! To continue, please login using your registered
