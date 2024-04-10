@@ -110,17 +110,21 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
         await SecureStore.setItemAsync(STORAGE_KEY.TOKEN, response.data.data.token);
         await SecureStore.setItemAsync(STORAGE_KEY.REFRESH_TOKEN, response.data.data.refreshToken);
         setBothAuthToken(response.data.data.token, response.data.data.refreshToken);
+      } else if (
+        ['CONNECTION_ERROR', 'NETWORK_ERROR', 'TIMEOUT_ERROR'].includes(response.problem ?? '')
+      ) {
+        authStore.setSnackbar('Please check your network connection before continue!');
       } else {
         if (response.data.code === 'NOT_FOUND') {
-          authStore.setSnackbar('Email or password is invalid');
+          authStore.setSnackbar('Email or password is invalid!');
           authStore.setIsInvalid();
         } else {
-          authStore.setSnackbar('Unknown Error occured!');
+          authStore.setSnackbar('Unknown error occured!');
         }
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
-      authStore.setSnackbar('Unknown Error occured!');
+      authStore.setSnackbar('Unknown error occured!');
     }
     authStore.setLoading(false);
   }
