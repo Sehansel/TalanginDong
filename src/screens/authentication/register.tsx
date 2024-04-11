@@ -297,6 +297,13 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
             onDismiss={() => {
               authStore.hideDialog();
               navigation.navigate('Login');
+            }}
+            theme={{
+              colors: {
+                elevation: {
+                  level3: 'white',
+                },
+              },
             }}>
             <Dialog.Icon size={45} color={COLOR.PRIMARY} icon='check-circle' />
             <Dialog.Title style={{ textAlign: 'center' }}>Success</Dialog.Title>
