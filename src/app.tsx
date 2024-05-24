@@ -28,13 +28,8 @@ export const App = observer(function App(props: AppProps) {
   } = useStores();
 
   (async () => {
-    // change this to always go to authNavigator
-    const alwaysReset = false;
-    // uncomment -> save -> comment -> save line below to reset token
-    // await SecureStore.deleteItemAsync(STORAGE_KEY.REFRESH_TOKEN);
-    // await SecureStore.deleteItemAsync(STORAGE_KEY.TOKEN);
     const refreshToken = await SecureStore.getItemAsync(STORAGE_KEY.REFRESH_TOKEN);
-    if (refreshToken && !alwaysReset) {
+    if (refreshToken) {
       try {
         const response = await AuthService.refreshToken(refreshToken);
         if (response.ok) {
