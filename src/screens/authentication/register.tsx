@@ -4,12 +4,13 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { Button, HelperText, Checkbox, Dialog, Portal, Snackbar } from 'react-native-paper';
+import { Button, Checkbox, Dialog, Portal, Snackbar } from 'react-native-paper';
 
 import { CustomTextInput } from '../../components/customTextInput';
 import { AuthNavigatorParamList } from '../../navigations/authNavigator';
 import * as AuthService from '../../services/authService';
 import { COLOR } from '../../theme';
+import { isNetworkError } from '../../utils/apiUtils';
 
 interface IRegisterProps {
   navigation: StackNavigationProp<AuthNavigatorParamList>;
@@ -20,121 +21,115 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
   const authStore = useLocalObservable(() => ({
     username: {
       value: '',
-      isError: false,
-      helperText: '',
+      errorText: '',
     },
     email: {
       value: '',
-      isError: false,
-      helperText: '',
+      errorText: '',
     },
     password: {
       value: '',
-      isError: false,
-      helperText: '',
+      errorText: '',
     },
     confirmPassword: {
       value: '',
-      isError: false,
-      helperText: '',
+      errorText: '',
     },
     isChecked: false,
-    isSubmited: false,
     loading: false,
-    snackbar: {
-      value: '',
-      visible: false,
-    },
+    snackbar: '',
     dialog: false,
+    usernameValidator() {
+      if (this.username.value === '') {
+        this.username.errorText = "This field can't be empty";
+      } else if (this.username.value.length < 3) {
+        this.username.errorText = 'Must be alteast 3 characters!';
+      } else if (!/^\w+$/.test(this.username.value)) {
+        this.username.errorText = 'Must be alphanumeric!';
+      } else {
+        this.username.errorText = '';
+      }
+    },
+    emailValidator() {
+      if (this.email.value === '') {
+        this.email.errorText = "This field can't be empty";
+      } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(this.email.value)) {
+        this.email.errorText = 'Email is invalid!';
+      } else {
+        this.email.errorText = '';
+      }
+    },
+    passwordValidator() {
+      if (this.password.value === '') {
+        this.password.errorText = "This field can't be empty";
+      } else if (this.password.value.length < 8) {
+        this.password.errorText = 'Must be atleast 8 characters!';
+      } else if (!/[A-Z]/.test(this.password.value) || !/[a-z]/.test(this.password.value)) {
+        this.password.errorText = 'Must include lowercase and uppercase letter!';
+      } else if (!/[0-9]/.test(this.password.value)) {
+        this.password.errorText = 'Must include number!';
+      } else {
+        this.password.errorText = '';
+      }
+    },
+    confirmPasswordValidator() {
+      if (this.confirmPassword.value === '') {
+        this.confirmPassword.errorText = "This field can't be empty";
+      } else if (this.password.value !== this.confirmPassword.value) {
+        this.confirmPassword.errorText = "Password doesn't match!";
+      } else {
+        this.confirmPassword.errorText = '';
+      }
+    },
     setUsername(text: string) {
       this.username.value = text;
-      if (text.length < 3) {
-        this.username.isError = true;
-        this.username.helperText = 'Must be alteast 3 characters!';
-      } else if (!/^\w+$/.test(text)) {
-        this.username.isError = true;
-        this.username.helperText = 'Must be alphanumeric!';
-      } else {
-        this.username.isError = false;
-        this.username.helperText = '';
-      }
+      this.usernameValidator();
     },
     setEmail(text: string) {
       this.email.value = text;
-      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(text)) {
-        this.email.isError = true;
-        this.email.helperText = 'Email is invalid!';
-      } else {
-        this.email.isError = false;
-        this.email.helperText = '';
-      }
+      this.emailValidator();
     },
     setPassword(text: string) {
       this.password.value = text;
-      if (text.length < 8) {
-        this.password.isError = true;
-        this.password.helperText = 'Must be atleast 8 characters!';
-      } else if (!/[A-Z]/.test(text) || !/[a-z]/.test(text)) {
-        this.password.isError = true;
-        this.password.helperText = 'Must include lowercase and uppercase letter!';
-      } else if (!/[0-9]/.test(text)) {
-        this.password.isError = true;
-        this.password.helperText = 'Must include number!';
-      } else {
-        this.password.isError = false;
-        this.password.helperText = '';
-      }
+      this.passwordValidator();
     },
     setConfirmPassword(text: string) {
       this.confirmPassword.value = text;
-      if (this.password.value !== this.confirmPassword.value) {
-        this.confirmPassword.isError = true;
-        this.confirmPassword.helperText = "Password doesn't match!";
-      } else {
-        this.confirmPassword.isError = false;
-        this.confirmPassword.helperText = '';
-      }
-    },
-    setUsernameAlreadyExist() {
-      this.username.isError = true;
-      this.username.helperText = 'Username already exist!';
-    },
-    setEmailAlreadyExist() {
-      this.email.isError = true;
-      this.email.helperText = 'Email already exist!';
+      this.confirmPasswordValidator();
     },
     setIsChecked(state: boolean) {
       this.isChecked = state;
-    },
-    setIsSubmited() {
-      this.isSubmited = true;
     },
     setLoading(state: boolean) {
       this.loading = state;
     },
     setSnackbar(text: string) {
-      this.snackbar.value = text;
-      this.snackbar.visible = true;
+      this.snackbar = text;
     },
-    hideSnackbar() {
-      this.snackbar.value = '';
-      this.snackbar.visible = false;
+    setDialog(state: boolean) {
+      this.dialog = state;
     },
-    setDialogVisible() {
-      this.dialog = true;
+    setUsernameAlreadyExist() {
+      this.username.errorText = 'Username already exist!';
     },
-    hideDialog() {
-      this.dialog = false;
+    setEmailAlreadyExist() {
+      this.email.errorText = 'Email already exist!';
+    },
+    submitValidator() {
+      this.usernameValidator();
+      this.emailValidator();
+      this.passwordValidator();
+      this.confirmPasswordValidator();
     },
   }));
 
   async function submit() {
-    authStore.setIsSubmited();
+    authStore.submitValidator();
     if (
-      authStore.username.isError ||
-      authStore.email.isError ||
-      authStore.password.isError ||
-      authStore.confirmPassword.isError
+      authStore.username.errorText !== '' ||
+      authStore.email.errorText !== '' ||
+      authStore.password.errorText !== '' ||
+      authStore.confirmPassword.errorText !== ''
     )
       return;
     if (!authStore.isChecked) {
@@ -149,10 +144,8 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
         authStore.password.value,
       );
       if (response.ok) {
-        authStore.setDialogVisible();
-      } else if (
-        ['CONNECTION_ERROR', 'NETWORK_ERROR', 'TIMEOUT_ERROR'].includes(response.problem ?? '')
-      ) {
+        authStore.setDialog(true);
+      } else if (isNetworkError(response.problem)) {
         authStore.setSnackbar('Please check your network connection before continue!');
       } else {
         if (response.data.status === 409 && response.data.reason === 'Username already exist') {
@@ -181,54 +174,36 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
             label='Username'
             value={authStore.username.value}
             onChangeText={(text) => authStore.setUsername(text)}
-            error={authStore.username.isError}
+            returnKeyType='next'
+            autoCapitalize='none'
+            errorText={authStore.username.errorText}
           />
-          <HelperText
-            style={{ alignSelf: 'flex-start' }}
-            type='error'
-            visible={authStore.username.isError}
-            padding='none'>
-            {authStore.username.helperText}
-          </HelperText>
           <CustomTextInput
             label='Email'
             value={authStore.email.value}
             onChangeText={(text) => authStore.setEmail(text)}
-            error={authStore.email.isError}
+            returnKeyType='next'
             autoCapitalize='none'
+            errorText={authStore.email.errorText}
           />
-          <HelperText
-            style={{ alignSelf: 'flex-start' }}
-            type='error'
-            visible={authStore.email.isError}>
-            {authStore.email.helperText}
-          </HelperText>
           <CustomTextInput
-            isSecureInput
             label='Password'
             value={authStore.password.value}
             onChangeText={(text) => authStore.setPassword(text)}
-            error={authStore.password.isError}
+            returnKeyType='next'
+            autoCapitalize='none'
+            errorText={authStore.password.errorText}
+            secureTextEntry
           />
-          <HelperText
-            style={{ alignSelf: 'flex-start' }}
-            type='error'
-            visible={authStore.password.isError}>
-            {authStore.password.helperText}
-          </HelperText>
           <CustomTextInput
-            isSecureInput
             label='Confirm Password'
             value={authStore.confirmPassword.value}
             onChangeText={(text) => authStore.setConfirmPassword(text)}
-            error={authStore.confirmPassword.isError}
+            returnKeyType='done'
+            autoCapitalize='none'
+            errorText={authStore.confirmPassword.errorText}
+            secureTextEntry
           />
-          <HelperText
-            style={{ alignSelf: 'flex-start' }}
-            type='error'
-            visible={authStore.confirmPassword.isError}>
-            {authStore.confirmPassword.helperText}
-          </HelperText>
           <View
             style={{
               flexDirection: 'row',
@@ -271,6 +246,7 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
               justifyContent: 'center',
               flexDirection: 'column',
               marginTop: 55,
+              marginBottom: 30,
             }}>
             <View style={styles.iconContainer}>
               <Image
@@ -281,21 +257,21 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
             <Text style={{ fontWeight: '600', fontSize: 20 }}>TalanginDong</Text>
           </View>
         </View>
-        <Snackbar
-          visible={authStore.snackbar.visible}
-          onDismiss={authStore.hideSnackbar}
-          action={{
-            label: 'Ok',
-          }}
-          theme={{ colors: { inversePrimary: COLOR.PRIMARY } }}>
-          {authStore.snackbar.value}
-        </Snackbar>
         <Portal>
+          <Snackbar
+            visible={!(!authStore.snackbar || authStore.snackbar === '')}
+            onDismiss={() => authStore.setSnackbar('')}
+            action={{
+              label: 'Ok',
+            }}
+            theme={{ colors: { inversePrimary: COLOR.PRIMARY } }}>
+            {authStore.snackbar}
+          </Snackbar>
           <Dialog
             visible={authStore.dialog}
             dismissable={false}
             onDismiss={() => {
-              authStore.hideDialog();
+              authStore.setDialog(false);
               navigation.navigate('Login');
             }}
             theme={{
@@ -317,7 +293,7 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
               <Button
                 textColor={COLOR.PRIMARY}
                 onPress={() => {
-                  authStore.hideDialog();
+                  authStore.setDialog(false);
                   navigation.navigate('Login');
                 }}>
                 Ok

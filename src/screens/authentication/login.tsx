@@ -5,14 +5,15 @@ import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
-import { Button, HelperText, Snackbar } from 'react-native-paper';
-import { STORAGE_KEY } from 'src/constants';
-import { useStores } from 'src/models';
+import { Button, Portal, Snackbar } from 'react-native-paper';
 
 import { CustomTextInput } from '../../components/customTextInput';
+import { STORAGE_KEY } from '../../constants';
+import { useStores } from '../../models';
 import { AuthNavigatorParamList } from '../../navigations/authNavigator';
 import * as AuthService from '../../services/authService';
 import { COLOR } from '../../theme';
+import { isNetworkError } from '../../utils/apiUtils';
 
 interface ILoginProps {
   navigation: StackNavigationProp<AuthNavigatorParamList>;
@@ -26,83 +27,55 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
   const authStore = useLocalObservable(() => ({
     email: {
       value: '',
-      isError: false,
-      isInvalid: false,
+      errorText: '',
     },
     password: {
       value: '',
-      isError: false,
-      isInvalid: false,
+      errorText: '',
     },
-    isSubmited: false,
     loading: false,
-    snackbar: {
-      value: '',
-      visible: false,
+    snackbar: '',
+    emailValidator() {
+      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
+        this.email.errorText = 'Email is invalid!';
+      } else {
+        this.email.errorText = '';
+      }
+    },
+    passwordValidator() {
+      if (this.password.value.length === 0) {
+        this.password.errorText = 'Password is invalid!';
+      } else {
+        this.password.errorText = '';
+      }
     },
     setEmail(text: string) {
       this.email.value = text;
-      this.email.isInvalid = false;
-      this.password.isInvalid = false;
-      if (this.isSubmited) {
-        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
-          this.email.isError = true;
-        } else {
-          this.email.isError = false;
-        }
-        if (this.password.value.length === 0) {
-          this.password.isError = true;
-        } else {
-          this.password.isError = false;
-        }
-      }
+      this.emailValidator();
     },
     setPassword(text: string) {
       this.password.value = text;
-      this.email.isInvalid = false;
-      this.password.isInvalid = false;
-      if (this.isSubmited) {
-        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
-          this.email.isError = true;
-        } else {
-          this.email.isError = false;
-        }
-        if (this.password.value.length === 0) {
-          this.password.isError = true;
-        } else {
-          this.password.isError = false;
-        }
-      }
+      this.passwordValidator();
     },
     setIsInvalid() {
-      this.email.isInvalid = true;
-      this.password.isInvalid = true;
+      this.email.errorText = 'Email is invalid!';
+      this.password.errorText = 'Password is invalid!';
     },
-    setIsSubmited() {
-      this.isSubmited = true;
-      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
-        this.email.isError = true;
-      }
-      if (this.password.value.length === 0) {
-        this.password.isError = true;
-      }
+    submitValidator() {
+      this.emailValidator();
+      this.passwordValidator();
     },
     setLoading(state: boolean) {
       this.loading = state;
     },
     setSnackbar(text: string) {
-      this.snackbar.value = text;
-      this.snackbar.visible = true;
-    },
-    hideSnackbar() {
-      this.snackbar.value = '';
-      this.snackbar.visible = false;
+      this.snackbar = text;
     },
   }));
 
   async function submit() {
-    authStore.setIsSubmited();
-    if (authStore.email.isError || authStore.password.isError) return;
+    authStore.submitValidator();
+    if (authStore.email.errorText !== '' || authStore.password.errorText !== '') return;
     authStore.setLoading(true);
     try {
       const response = await AuthService.login(authStore.email.value, authStore.password.value);
@@ -110,9 +83,7 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
         await SecureStore.setItemAsync(STORAGE_KEY.TOKEN, response.data.data.token);
         await SecureStore.setItemAsync(STORAGE_KEY.REFRESH_TOKEN, response.data.data.refreshToken);
         setBothAuthToken(response.data.data.token, response.data.data.refreshToken);
-      } else if (
-        ['CONNECTION_ERROR', 'NETWORK_ERROR', 'TIMEOUT_ERROR'].includes(response.problem ?? '')
-      ) {
+      } else if (isNetworkError(response.problem)) {
         authStore.setSnackbar('Please check your network connection before continue!');
       } else {
         if (response.data.code === 'NOT_FOUND') {
@@ -138,28 +109,20 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
             label='Email'
             value={authStore.email.value}
             onChangeText={(text) => authStore.setEmail(text)}
-            error={authStore.email.isError || authStore.email.isInvalid}
+            returnKeyType='next'
             autoCapitalize='none'
+            errorText={authStore.email.errorText}
           />
-          <HelperText
-            style={{ alignSelf: 'flex-start' }}
-            type='error'
-            visible={authStore.email.isError || authStore.email.isInvalid}>
-            Email is invalid!
-          </HelperText>
           <CustomTextInput
-            isSecureInput
             label='Password'
             value={authStore.password.value}
             onChangeText={(text) => authStore.setPassword(text)}
-            error={authStore.password.isError || authStore.password.isInvalid}
+            returnKeyType='done'
+            autoCapitalize='none'
+            errorText={authStore.password.errorText}
+            secureTextEntry
           />
           <View style={styles.forgotPasswordContainer}>
-            <HelperText
-              type='error'
-              visible={authStore.password.isError || authStore.password.isInvalid}>
-              Password is invalid!
-            </HelperText>
             <Pressable onPress={() => navigation.navigate('ForgotPassword')}>
               <Text style={styles.touchableText}>Forgot Password?</Text>
             </Pressable>
@@ -185,6 +148,7 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
               justifyContent: 'center',
               flexDirection: 'column',
               marginTop: 222,
+              marginBottom: 30,
             }}>
             <View style={styles.iconContainer}>
               <Image
@@ -195,15 +159,17 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
             <Text style={{ fontWeight: '600', fontSize: 20 }}>TalanginDong</Text>
           </View>
         </View>
-        <Snackbar
-          visible={authStore.snackbar.visible}
-          onDismiss={authStore.hideSnackbar}
-          action={{
-            label: 'Ok',
-          }}
-          theme={{ colors: { inversePrimary: COLOR.PRIMARY } }}>
-          {authStore.snackbar.value}
-        </Snackbar>
+        <Portal>
+          <Snackbar
+            visible={!(!authStore.snackbar || authStore.snackbar === '')}
+            onDismiss={() => authStore.setSnackbar('')}
+            action={{
+              label: 'Ok',
+            }}
+            theme={{ colors: { inversePrimary: COLOR.PRIMARY } }}>
+            {authStore.snackbar}
+          </Snackbar>
+        </Portal>
         <StatusBar style='auto' />
       </View>
     </KeyboardAwareScrollView>
@@ -226,7 +192,7 @@ const styles = StyleSheet.create({
   forgotPasswordContainer: {
     alignItems: 'center',
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     width: '100%',
   },
   accountCreateContainer: {

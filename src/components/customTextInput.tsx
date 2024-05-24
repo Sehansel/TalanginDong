@@ -1,60 +1,66 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 import { COLOR } from '../theme';
 
-interface ICustomTextInputProps {
-  isSecureInput?: boolean;
-  label?: string;
-  value?: string;
-  onChangeText?: ((text: string) => void) & Function;
-  error?: boolean;
-  autoCapitalize?: 'none' | 'sentences' | 'words' | 'characters';
-}
+type ICustomTextInputProps = React.ComponentProps<typeof TextInput> & { errorText?: string };
 
 export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
   function CustomTextInput(props) {
-    const { isSecureInput = false, label, value, onChangeText, error, autoCapitalize } = props;
+    const { errorText, secureTextEntry, autoCapitalize } = props;
     const [isPasswordHidden, setIsPasswordHidden] = React.useState(true);
     return (
-      <TextInput
-        mode='outlined'
-        label={label}
-        value={value}
-        onChangeText={onChangeText}
-        secureTextEntry={isSecureInput ? isPasswordHidden : false}
-        autoCapitalize={autoCapitalize ? autoCapitalize : isSecureInput ? 'none' : 'sentences'}
-        right={
-          isSecureInput ? (
-            <TextInput.Icon
-              icon={isPasswordHidden ? 'eye' : 'eye-off'}
-              onPress={() => setIsPasswordHidden(!isPasswordHidden)}
-              style={styles.eyeIcon}
-            />
-          ) : undefined
-        }
-        style={styles.textInput}
-        activeOutlineColor={COLOR.PRIMARY}
-        outlineColor={COLOR.GREY_1}
-        theme={{
-          colors: {
-            background: COLOR.GREY_2,
-          },
-        }}
-        error={error}
-      />
+      <View style={styles.container}>
+        <TextInput
+          mode='outlined'
+          secureTextEntry={secureTextEntry ? isPasswordHidden : false}
+          autoCapitalize={autoCapitalize ? autoCapitalize : secureTextEntry ? 'none' : 'sentences'}
+          right={
+            secureTextEntry ? (
+              <TextInput.Icon
+                icon={isPasswordHidden ? 'eye' : 'eye-off'}
+                onPress={() => setIsPasswordHidden(!isPasswordHidden)}
+                style={styles.eyeIcon}
+              />
+            ) : undefined
+          }
+          textColor='black'
+          style={styles.textInput}
+          activeOutlineColor={COLOR.PRIMARY}
+          outlineColor={COLOR.GREY_1}
+          theme={{
+            colors: {
+              background: COLOR.GREY_2,
+              error: COLOR.RED,
+            },
+          }}
+          error={!(!errorText || errorText === '')}
+          {...props}
+        />
+        {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
+      </View>
     );
   },
 );
 
 const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    marginVertical: 12,
+  },
   textInput: {
     width: '100%',
     height: 50,
   },
   eyeIcon: {
     marginTop: 15,
+  },
+  error: {
+    fontSize: 14,
+    paddingHorizontal: 4,
+    paddingTop: 4,
+    color: COLOR.RED,
   },
 });
