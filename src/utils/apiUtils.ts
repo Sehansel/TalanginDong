@@ -12,6 +12,10 @@ export const determineError = function determineError(error: AxiosError): errorC
   return 'REQUEST_ERROR';
 };
 
+export const isNetworkError = function isNetworkError(problem: errorCode | undefined): boolean {
+  return ['NETWORK_ERROR', 'TIMEOUT_ERROR', 'CONNECTION_ERROR'].includes(problem ?? '');
+};
+
 export const request = async function request(config: AxiosRequestConfig) {
   try {
     const response = await axios(config);
