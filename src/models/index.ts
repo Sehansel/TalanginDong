@@ -14,7 +14,7 @@ import { RootStore, RootStoreModel } from './rootStore';
  * very large), you may want to use a different strategy than immediately
  * instantiating it, although that should be rare.
  */
-const _rootStore = RootStoreModel.create({});
+export const _rootStore = RootStoreModel.create({});
 
 /**
  * The RootStoreContext provides a way to access

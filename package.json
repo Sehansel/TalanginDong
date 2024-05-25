@@ -18,6 +18,7 @@
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
     "axios": "^1.7.2",
+    "axios-auth-refresh": "^3.3.6",
     "expo": "^51.0.8",
     "expo-build-properties": "^0.12.1",
     "expo-dev-client": "~4.0.14",
