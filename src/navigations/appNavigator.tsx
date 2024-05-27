@@ -4,13 +4,13 @@ import React from 'react';
 import { useStores } from 'src/models';
 
 import { AuthNavigator } from './authNavigator';
-import { HomeNavigator } from './homeNavigator';
+import { MainNavigator } from './mainNavigator';
 
 interface IAppNavigator {}
 
 export type AppNavigatorParamList = {
   AuthNavigator: undefined;
-  HomeNavigator: undefined;
+  MainNavigator: undefined;
 };
 
 const Stack = createStackNavigator<AppNavigatorParamList>();
@@ -21,7 +21,7 @@ export const AppNavigator: React.FC<IAppNavigator> = observer(function AppNaviga
   } = useStores();
 
   return (
-    <Stack.Navigator initialRouteName={!isAuthenticated ? 'AuthNavigator' : 'HomeNavigator'}>
+    <Stack.Navigator initialRouteName={!isAuthenticated ? 'AuthNavigator' : 'MainNavigator'}>
       {!isAuthenticated ? (
         <Stack.Screen
           name='AuthNavigator'
@@ -32,8 +32,8 @@ export const AppNavigator: React.FC<IAppNavigator> = observer(function AppNaviga
         />
       ) : (
         <Stack.Screen
-          name='HomeNavigator'
-          component={HomeNavigator}
+          name='MainNavigator'
+          component={MainNavigator}
           options={{
             headerShown: false,
           }}
