@@ -294,7 +294,17 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
                 textColor={COLOR.PRIMARY}
                 onPress={() => {
                   authStore.setDialog(false);
-                  navigation.navigate('Login');
+                  navigation.reset({
+                    index: 1,
+                    routes: [
+                      {
+                        name: 'Welcome',
+                      },
+                      {
+                        name: 'Login',
+                      },
+                    ],
+                  });
                 }}>
                 Ok
               </Button>
