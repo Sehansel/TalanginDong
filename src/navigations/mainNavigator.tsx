@@ -5,8 +5,8 @@ import { TouchableRipple } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLOR } from 'src/theme';
 
+import { FriendNavigator } from './friendNavigator';
 import { CreateScreen } from '../screens/main/create';
-import { FriendScreen } from '../screens/main/friend';
 import { HistoryScreen } from '../screens/main/history';
 import { HomeScreen } from '../screens/main/home';
 import { ProfileScreen } from '../screens/main/profile';
@@ -79,7 +79,7 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
       />
       <Tab.Screen
         name='Friend'
-        component={FriendScreen}
+        component={FriendNavigator}
         options={{
           tabBarIcon: ({ focused, color, size }) => (
             <TabBarButton
