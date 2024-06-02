@@ -5,12 +5,11 @@ import React from 'react';
 import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Button, Checkbox, Dialog, Portal, Snackbar } from 'react-native-paper';
-
-import { CustomTextInput } from '../../components/customTextInput';
-import { AuthNavigatorParamList } from '../../navigations/authNavigator';
-import * as AuthService from '../../services/authService';
-import { COLOR } from '../../theme';
-import { isNetworkError } from '../../utils/apiUtils';
+import { CustomTextInput } from 'src/components/customTextInput';
+import { AuthNavigatorParamList } from 'src/navigations/authNavigator';
+import * as AuthService from 'src/services/authService';
+import { COLOR } from 'src/theme';
+import { isNetworkError } from 'src/utils/apiUtils';
 
 interface IRegisterProps {
   navigation: StackNavigationProp<AuthNavigatorParamList>;

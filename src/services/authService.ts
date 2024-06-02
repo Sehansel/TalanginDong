@@ -1,5 +1,5 @@
-import { API } from '../constants';
-import { request } from '../utils/apiUtils';
+import { API } from 'src/constants';
+import { request } from 'src/utils/apiUtils';
 
 export const login = function login(email: string, password: string) {
   return request({

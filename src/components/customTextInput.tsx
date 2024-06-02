@@ -2,8 +2,7 @@ import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { TextInput } from 'react-native-paper';
-
-import { COLOR } from '../theme';
+import { COLOR } from 'src/theme';
 
 type ICustomTextInputProps = React.ComponentProps<typeof TextInput> & { errorText?: string };
 

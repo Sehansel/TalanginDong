@@ -3,13 +3,12 @@ import React from 'react';
 import { Text, View } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { FriendNavigator } from 'src/navigations/friendNavigator';
+import { CreateScreen } from 'src/screens/main/create';
+import { HistoryScreen } from 'src/screens/main/history';
+import { HomeScreen } from 'src/screens/main/home';
+import { ProfileScreen } from 'src/screens/main/profile';
 import { COLOR } from 'src/theme';
-
-import { FriendNavigator } from './friendNavigator';
-import { CreateScreen } from '../screens/main/create';
-import { HistoryScreen } from '../screens/main/history';
-import { HomeScreen } from '../screens/main/home';
-import { ProfileScreen } from '../screens/main/profile';
 
 interface ITabBarButton {
   focused: boolean;

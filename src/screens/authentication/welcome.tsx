@@ -3,9 +3,8 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { StyleSheet, Text, View, Image } from 'react-native';
 import { Button } from 'react-native-paper';
-
-import { AuthNavigatorParamList } from '../../navigations/authNavigator';
-import { COLOR } from '../../theme';
+import { AuthNavigatorParamList } from 'src/navigations/authNavigator';
+import { COLOR } from 'src/theme';
 
 interface IWelcomeProps {
   navigation: StackNavigationProp<AuthNavigatorParamList>;

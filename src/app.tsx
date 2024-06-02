@@ -6,11 +6,10 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { KeyboardProvider } from 'react-native-keyboard-controller';
 import { PaperProvider } from 'react-native-paper';
 import { initialWindowMetrics, SafeAreaProvider } from 'react-native-safe-area-context';
-
-import { STORAGE_KEY } from './constants';
-import { useStores } from './models';
-import { AppNavigator } from './navigations/appNavigator';
-import * as AuthService from './services/authService';
+import { STORAGE_KEY } from 'src/constants';
+import { useStores } from 'src/models';
+import { AppNavigator } from 'src/navigations/appNavigator';
+import * as AuthService from 'src/services/authService';
 
 interface AppProps {
   hideSplashScreen: () => Promise<boolean>;

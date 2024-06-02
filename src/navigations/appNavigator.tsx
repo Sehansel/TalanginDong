@@ -2,9 +2,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { useStores } from 'src/models';
-
-import { AuthNavigator } from './authNavigator';
-import { MainNavigator } from './mainNavigator';
+import { AuthNavigator } from 'src/navigations/authNavigator';
+import { MainNavigator } from 'src/navigations/mainNavigator';
 
 interface IAppNavigator {}
 

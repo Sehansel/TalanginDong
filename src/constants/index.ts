@@ -1,6 +1,6 @@
-import API from './api';
-import AXIOS_ERROR from './axiosError';
-import ROUTES from './routes';
-import STORAGE_KEY from './storageKey';
+import API from 'src/constants/api';
+import AXIOS_ERROR from 'src/constants/axiosError';
+import ROUTES from 'src/constants/routes';
+import STORAGE_KEY from 'src/constants/storageKey';
 
 export { ROUTES, AXIOS_ERROR, API, STORAGE_KEY };
