@@ -13,9 +13,12 @@ export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
     return (
       <View style={styles.container}>
         <TextInput
+          {...props}
           mode='outlined'
-          secureTextEntry={secureTextEntry ? isPasswordHidden : false}
           autoCapitalize={autoCapitalize ? autoCapitalize : secureTextEntry ? 'none' : 'sentences'}
+          keyboardType={
+            secureTextEntry ? (isPasswordHidden ? 'default' : 'visible-password') : undefined
+          }
           right={
             secureTextEntry ? (
               <TextInput.Icon
@@ -36,7 +39,6 @@ export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
             },
           }}
           error={!(!errorText || errorText === '')}
-          {...props}
         />
         {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
       </View>
