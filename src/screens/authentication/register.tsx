@@ -2,7 +2,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Button, Checkbox, Dialog, Portal, Snackbar } from 'react-native-paper';
 import { CustomTextInput } from 'src/components/customTextInput';
@@ -164,9 +164,25 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
     authStore.setLoading(false);
   }
 
+  const dynamicStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height:
+        Dimensions.get('window').height -
+        80 +
+        (authStore.username.errorText === '' ? 0 : 20) +
+        (authStore.email.errorText === '' ? 0 : 20) +
+        (authStore.password.errorText === '' ? 0 : 20) +
+        (authStore.confirmPassword.errorText === '' ? 0 : 20),
+    },
+  });
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flexGrow: 1 }}>
-      <View style={styles.container}>
+      <View style={dynamicStyles.container}>
         <View style={styles.centerContainer}>
           <Text style={styles.title}>Register</Text>
           <CustomTextInput
@@ -241,11 +257,11 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
           </View>
           <View
             style={{
+              position: 'absolute',
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              marginTop: 55,
-              marginBottom: 30,
+              bottom: 20,
             }}>
             <View style={styles.iconContainer}>
               <Image
@@ -317,12 +333,6 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   centerContainer: {
     flex: 1,
     margin: 5,

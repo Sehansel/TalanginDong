@@ -33,6 +33,9 @@ export const AuthNavigator: React.FC<IAuthNavigator> = function AuthNavigator(pr
           headerBackTitleVisible: false,
           title: '',
           headerShadowVisible: false,
+          headerStyle: {
+            height: 60,
+          },
         }}
       />
       <Stack.Screen
@@ -42,6 +45,9 @@ export const AuthNavigator: React.FC<IAuthNavigator> = function AuthNavigator(pr
           headerBackTitleVisible: false,
           title: '',
           headerShadowVisible: false,
+          headerStyle: {
+            height: 60,
+          },
         }}
       />
       <Stack.Screen
@@ -51,6 +57,9 @@ export const AuthNavigator: React.FC<IAuthNavigator> = function AuthNavigator(pr
           headerBackTitleVisible: false,
           title: '',
           headerShadowVisible: false,
+          headerStyle: {
+            height: 60,
+          },
         }}
       />
     </Stack.Navigator>

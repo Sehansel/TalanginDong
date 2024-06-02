@@ -3,7 +3,7 @@ import * as SecureStore from 'expo-secure-store';
 import { StatusBar } from 'expo-status-bar';
 import { observer, useLocalObservable } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Pressable, Image, Dimensions } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { Button, Portal, Snackbar } from 'react-native-paper';
 import { CustomTextInput } from 'src/components/customTextInput';
@@ -105,9 +105,23 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
     authStore.setLoading(false);
   }
 
+  const dynamicStyles = StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: '#fff',
+      alignItems: 'center',
+      justifyContent: 'center',
+      height:
+        Dimensions.get('window').height -
+        80 +
+        (authStore.email.errorText === '' ? 0 : 20) +
+        (authStore.password.errorText === '' ? 0 : 20),
+    },
+  });
+
   return (
     <KeyboardAwareScrollView contentContainerStyle={{ flexGrow: 1 }} style={{ flexGrow: 1 }}>
-      <View style={styles.container}>
+      <View style={dynamicStyles.container}>
         <View style={styles.centerContainer}>
           <Text style={styles.title}>Login</Text>
           <CustomTextInput
@@ -149,11 +163,13 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
           </View>
           <View
             style={{
+              position: 'absolute',
               alignItems: 'center',
               justifyContent: 'center',
               flexDirection: 'column',
-              marginTop: 222,
-              marginBottom: 30,
+              bottom: 20,
+              // marginTop: 222,
+              // marginBottom: 30,
             }}>
             <View style={styles.iconContainer}>
               <Image
@@ -182,12 +198,6 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
 });
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   centerContainer: {
     flex: 1,
     margin: 5,
