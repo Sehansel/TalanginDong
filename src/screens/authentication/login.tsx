@@ -168,8 +168,6 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
               justifyContent: 'center',
               flexDirection: 'column',
               bottom: 20,
-              // marginTop: 222,
-              // marginBottom: 30,
             }}>
             <View style={styles.iconContainer}>
               <Image
