@@ -51,10 +51,16 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
     setEmail(text: string) {
       this.email.value = text;
       this.emailValidator();
+      if (this.password.errorText !== '') {
+        this.passwordValidator();
+      }
     },
     setPassword(text: string) {
       this.password.value = text;
       this.passwordValidator();
+      if (this.email.errorText !== '') {
+        this.emailValidator();
+      }
     },
     setIsInvalid() {
       this.email.errorText = 'Email is invalid!';
