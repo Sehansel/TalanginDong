@@ -111,7 +111,7 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
                 alignItems: 'center',
                 justifyContent: 'center',
               }}>
-              <Icon name='plus' size={size + 10} color='#ffffff' />
+              <Icon name='plus' size={size + 10} color={COLOR.WHITE} />
             </View>
           ),
           tabBarButton: (props) => (
@@ -125,7 +125,7 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
                 height: 60,
                 borderRadius: 35,
                 backgroundColor: COLOR.PRIMARY,
-                shadowColor: '#7f5df0',
+                shadowColor: COLOR.GREY_3,
                 shadowOffset: {
                   width: 0,
                   height: 10,
