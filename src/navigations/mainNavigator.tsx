@@ -55,6 +55,21 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
     <Tab.Navigator
       screenOptions={{
         tabBarShowLabel: false,
+        tabBarButton: (props) => (
+          <TouchableRipple
+            onPress={props.onPress}
+            borderless
+            style={{
+              alignItems: 'center',
+              flex: 1,
+              backgroundColor: 'transparent',
+              flexDirection: 'column',
+              justifyContent: 'flex-end',
+              borderRadius: 15,
+            }}>
+            {props.children}
+          </TouchableRipple>
+        ),
       }}>
       <Tab.Screen
         name='Home'
@@ -68,11 +83,6 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
               label='Home'
               iconName='home'
             />
-          ),
-          tabBarButton: (props) => (
-            <TouchableRipple onPress={props.onPress} style={props.style}>
-              {props.children}
-            </TouchableRipple>
           ),
         }}
       />
@@ -88,11 +98,6 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
               label='Friend'
               iconName='account-multiple'
             />
-          ),
-          tabBarButton: (props) => (
-            <TouchableRipple onPress={props.onPress} style={props.style}>
-              {props.children}
-            </TouchableRipple>
           ),
         }}
       />
@@ -148,11 +153,6 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
               iconName='file-document-edit'
             />
           ),
-          tabBarButton: (props) => (
-            <TouchableRipple onPress={props.onPress} style={props.style}>
-              {props.children}
-            </TouchableRipple>
-          ),
         }}
       />
       <Tab.Screen
@@ -167,11 +167,6 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
               label='Profile'
               iconName='account-circle'
             />
-          ),
-          tabBarButton: (props) => (
-            <TouchableRipple onPress={props.onPress} style={props.style}>
-              {props.children}
-            </TouchableRipple>
           ),
         }}
       />
