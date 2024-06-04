@@ -13,11 +13,6 @@ export const LoginStoreModel = types
     loading: types.boolean,
     snackbar: types.string,
   })
-  .views((store) => ({
-    get token() {
-      return store.email;
-    },
-  }))
   .actions((store) => ({
     emailValidator() {
       if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(store.email.value)) {

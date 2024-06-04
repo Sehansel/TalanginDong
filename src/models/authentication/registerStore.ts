@@ -17,11 +17,6 @@ export const RegisterStoreModel = types
     snackbar: types.string,
     dialog: types.boolean,
   })
-  .views((store) => ({
-    get token() {
-      return store.email;
-    },
-  }))
   .actions((store) => ({
     usernameValidator() {
       if (store.username.value === '') {
@@ -107,5 +102,5 @@ export const RegisterStoreModel = types
     },
   }));
 
-export interface LoginStore extends Instance<typeof RegisterStoreModel> {}
-export interface LoginStoreSnapshot extends SnapshotOut<typeof RegisterStoreModel> {}
+export interface RegisterStore extends Instance<typeof RegisterStoreModel> {}
+export interface RegisterStoreSnapshot extends SnapshotOut<typeof RegisterStoreModel> {}
