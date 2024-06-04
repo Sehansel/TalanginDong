@@ -9,6 +9,7 @@ import { Button, Portal, Snackbar } from 'react-native-paper';
 import { CustomTextInput } from 'src/components/customTextInput';
 import { STORAGE_KEY } from 'src/constants';
 import { useStores } from 'src/models';
+import { LoginStoreModel } from 'src/models/authentication/loginStore';
 import { AuthNavigatorParamList } from 'src/navigations/authNavigator';
 import * as AuthService from 'src/services/authService';
 import { COLOR } from 'src/theme';
@@ -23,86 +24,46 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
   const {
     authenticationStore: { setBothAuthToken },
   } = useStores();
-  const authStore = useLocalObservable(() => ({
-    email: {
-      value: '',
-      errorText: '',
-    },
-    password: {
-      value: '',
-      errorText: '',
-    },
-    loading: false,
-    snackbar: '',
-    emailValidator() {
-      if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g.test(this.email.value)) {
-        this.email.errorText = 'Email is invalid!';
-      } else {
-        this.email.errorText = '';
-      }
-    },
-    passwordValidator() {
-      if (this.password.value.length === 0) {
-        this.password.errorText = 'Password is invalid!';
-      } else {
-        this.password.errorText = '';
-      }
-    },
-    setEmail(text: string) {
-      this.email.value = text;
-      this.emailValidator();
-      if (this.password.errorText !== '') {
-        this.passwordValidator();
-      }
-    },
-    setPassword(text: string) {
-      this.password.value = text;
-      this.passwordValidator();
-      if (this.email.errorText !== '') {
-        this.emailValidator();
-      }
-    },
-    setIsInvalid() {
-      this.email.errorText = 'Email is invalid!';
-      this.password.errorText = 'Password is invalid!';
-    },
-    submitValidator() {
-      this.emailValidator();
-      this.passwordValidator();
-    },
-    setLoading(state: boolean) {
-      this.loading = state;
-    },
-    setSnackbar(text: string) {
-      this.snackbar = text;
-    },
-  }));
+  const loginStore = useLocalObservable(() =>
+    LoginStoreModel.create({
+      email: {
+        value: '',
+        errorText: '',
+      },
+      password: {
+        value: '',
+        errorText: '',
+      },
+      loading: false,
+      snackbar: '',
+    }),
+  );
 
   async function submit() {
-    authStore.submitValidator();
-    if (authStore.email.errorText !== '' || authStore.password.errorText !== '') return;
-    authStore.setLoading(true);
+    loginStore.submitValidator();
+    if (loginStore.email.errorText !== '' || loginStore.password.errorText !== '') return;
+    loginStore.setLoading(true);
     try {
-      const response = await AuthService.login(authStore.email.value, authStore.password.value);
+      const response = await AuthService.login(loginStore.email.value, loginStore.password.value);
       if (response.ok) {
         await SecureStore.setItemAsync(STORAGE_KEY.TOKEN, response.data.data.token);
         await SecureStore.setItemAsync(STORAGE_KEY.REFRESH_TOKEN, response.data.data.refreshToken);
         setBothAuthToken(response.data.data.token, response.data.data.refreshToken);
       } else if (isNetworkError(response.problem)) {
-        authStore.setSnackbar('Please check your network connection before continue!');
+        loginStore.setSnackbar('Please check your network connection before continue!');
       } else {
         if (response.data.code === 'NOT_FOUND') {
-          authStore.setSnackbar('Email or password is invalid!');
-          authStore.setIsInvalid();
+          loginStore.setSnackbar('Email or password is invalid!');
+          loginStore.setIsInvalid();
         } else {
-          authStore.setSnackbar('Unknown error occured!');
+          loginStore.setSnackbar('Unknown error occured!');
         }
       }
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
-      authStore.setSnackbar('Unknown error occured!');
+      loginStore.setSnackbar('Unknown error occured!');
     }
-    authStore.setLoading(false);
+    loginStore.setLoading(false);
   }
 
   const dynamicStyles = StyleSheet.create({
@@ -114,8 +75,8 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
       height:
         Dimensions.get('window').height -
         80 +
-        (authStore.email.errorText === '' ? 0 : 20) +
-        (authStore.password.errorText === '' ? 0 : 20),
+        (loginStore.email.errorText === '' ? 0 : 20) +
+        (loginStore.password.errorText === '' ? 0 : 20),
     },
   });
 
@@ -126,19 +87,19 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
           <Text style={styles.title}>Login</Text>
           <CustomTextInput
             label='Email'
-            value={authStore.email.value}
-            onChangeText={(text) => authStore.setEmail(text)}
+            value={loginStore.email.value}
+            onChangeText={(text) => loginStore.setEmail(text)}
             returnKeyType='next'
             autoCapitalize='none'
-            errorText={authStore.email.errorText}
+            errorText={loginStore.email.errorText}
           />
           <CustomTextInput
             label='Password'
-            value={authStore.password.value}
-            onChangeText={(text) => authStore.setPassword(text)}
+            value={loginStore.password.value}
+            onChangeText={(text) => loginStore.setPassword(text)}
             returnKeyType='done'
             autoCapitalize='none'
-            errorText={authStore.password.errorText}
+            errorText={loginStore.password.errorText}
             secureTextEntry
           />
           <View style={styles.forgotPasswordContainer}>
@@ -152,7 +113,7 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
             textColor='white'
             style={styles.button}
             onPress={submit}
-            loading={authStore.loading}>
+            loading={loginStore.loading}>
             Login
           </Button>
           <View style={styles.accountCreateContainer}>
@@ -180,13 +141,13 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
         </View>
         <Portal>
           <Snackbar
-            visible={!(!authStore.snackbar || authStore.snackbar === '')}
-            onDismiss={() => authStore.setSnackbar('')}
+            visible={!(!loginStore.snackbar || loginStore.snackbar === '')}
+            onDismiss={() => loginStore.setSnackbar('')}
             action={{
               label: 'Ok',
             }}
             theme={{ colors: { inversePrimary: COLOR.PRIMARY } }}>
-            {authStore.snackbar}
+            {loginStore.snackbar}
           </Snackbar>
         </Portal>
         <StatusBar style='auto' />
