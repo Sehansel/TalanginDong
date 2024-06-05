@@ -120,6 +120,7 @@ export const RegisterScreen: React.FC<IRegisterProps> = observer(function Regist
             onChangeText={(text) => registerStore.setEmail(text)}
             returnKeyType='next'
             autoCapitalize='none'
+            keyboardType='email-address'
             errorText={registerStore.email.errorText}
           />
           <CustomTextInput

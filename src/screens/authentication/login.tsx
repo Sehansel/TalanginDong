@@ -91,6 +91,7 @@ export const LoginScreen: React.FC<ILoginProps> = observer(function LoginScreen(
             onChangeText={(text) => loginStore.setEmail(text)}
             returnKeyType='next'
             autoCapitalize='none'
+            keyboardType='email-address'
             errorText={loginStore.email.errorText}
           />
           <CustomTextInput

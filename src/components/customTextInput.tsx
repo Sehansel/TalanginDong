@@ -8,16 +8,17 @@ type ICustomTextInputProps = React.ComponentProps<typeof TextInput> & { errorTex
 
 export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
   function CustomTextInput(props) {
-    const { errorText, secureTextEntry, autoCapitalize } = props;
+    const { errorText, secureTextEntry, autoCapitalize, keyboardType } = props;
     const [isPasswordHidden, setIsPasswordHidden] = React.useState(true);
     return (
       <View style={styles.container}>
         <TextInput
           {...props}
           mode='outlined'
+          secureTextEntry={secureTextEntry ? !!isPasswordHidden : false}
           autoCapitalize={autoCapitalize ? autoCapitalize : secureTextEntry ? 'none' : 'sentences'}
           keyboardType={
-            secureTextEntry ? (isPasswordHidden ? 'default' : 'visible-password') : undefined
+            secureTextEntry ? (isPasswordHidden ? 'default' : 'visible-password') : keyboardType
           }
           right={
             secureTextEntry ? (
