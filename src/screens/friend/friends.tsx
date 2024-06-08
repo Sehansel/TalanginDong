@@ -207,7 +207,6 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
             )}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={() => <Divider />}
-            renderSectionFooter={() => <Divider />}
             stickySectionHeadersEnabled
             style={styles.section}
             refreshControl={
