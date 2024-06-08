@@ -8,3 +8,14 @@ export const list = function list() {
     useAuth: true,
   });
 };
+
+export const remove = function remove(friendId: string) {
+  return request({
+    method: 'DELETE',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/remove`,
+    useAuth: true,
+    data: {
+      friendId,
+    },
+  });
+};
