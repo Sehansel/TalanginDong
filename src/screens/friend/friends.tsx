@@ -34,7 +34,9 @@ const CustomMenu: React.FC<ICustomMenuProps> = observer(function CustomMenu(prop
     <Menu
       visible={visible}
       onDismiss={() => setVisible(false)}
-      anchor={<IconButton icon='dots-vertical' onPress={() => setVisible(true)} />}>
+      anchor={
+        <IconButton iconColor='grey' icon='dots-vertical' onPress={() => setVisible(true)} />
+      }>
       <Menu.Item
         onPress={() => {
           setVisible(false);
