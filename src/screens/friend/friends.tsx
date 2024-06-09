@@ -152,6 +152,7 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
         friendsStore.setIsLoading(true);
         await getFriendList();
         friendsStore.setIsLoading(false);
+        friendsStore.setFirstLoaded(true);
       })();
       return () => {};
     }, []),
@@ -201,10 +202,7 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
                   flexDirection: 'column',
                   width: '100%',
                 }}>
-                <Text style={styles.usernameTitle}>
-                  {section.title}
-                  <Divider />
-                </Text>
+                <Text style={styles.usernameTitle}>{section.title}</Text>
               </View>
             )}
             keyExtractor={(item) => item.id}
