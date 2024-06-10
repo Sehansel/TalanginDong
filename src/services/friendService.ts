@@ -19,3 +19,44 @@ export const remove = function remove(friendId: string) {
     },
   });
 };
+
+export const pending = function pending() {
+  return request({
+    method: 'GET',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/pending`,
+    useAuth: true,
+  });
+};
+
+export const cancel = function cancel(recipientId: string) {
+  return request({
+    method: 'DELETE',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/cancel`,
+    useAuth: true,
+    data: {
+      recipientId,
+    },
+  });
+};
+
+export const reject = function reject(requesterId: string) {
+  return request({
+    method: 'DELETE',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/reject`,
+    useAuth: true,
+    data: {
+      requesterId,
+    },
+  });
+};
+
+export const accept = function accept(requesterId: string) {
+  return request({
+    method: 'PUT',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/accept`,
+    useAuth: true,
+    data: {
+      requesterId,
+    },
+  });
+};

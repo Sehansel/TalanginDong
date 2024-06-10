@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 import { AuthenticationStoreModel } from 'src/models/authenticationStore';
-
-import { FriendsStoreModel } from './friend/friendsStore';
+import { FriendsStoreModel } from 'src/models/friend/friendsStore';
+import { PendingStoreModel } from 'src/models/friend/pendingStore';
 
 /**
  * A RootStore model.
@@ -13,6 +13,21 @@ export const RootStoreModel = types.model('RootStore').props({
     isFirstLoaded: false,
     refreshing: false,
     isLoading: false,
+    snackbar: '',
+    dialog: {
+      visible: false,
+      id: '',
+      username: '',
+      status: '',
+    },
+  }),
+  pendingStore: types.optional(PendingStoreModel, {
+    pendingList: [],
+    isFirstLoaded: false,
+    refreshing: false,
+    isLoading: false,
+    buttonStatus: '0',
+    currentId: '',
     snackbar: '',
     dialog: {
       visible: false,
