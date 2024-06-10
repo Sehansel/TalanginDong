@@ -391,7 +391,7 @@ const styles = StyleSheet.create({
   },
   usernameTitle: {
     backgroundColor: '#ffffff',
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: 'bold',
     padding: 10,
     elevation: 4,
