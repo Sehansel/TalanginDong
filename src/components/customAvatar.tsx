@@ -11,11 +11,13 @@ interface ICustomAvatarProps {
 export const CustomAvatar: React.FC<ICustomAvatarProps> = observer(function CustomAvatar(props) {
   const { label = 'Test', size } = props;
 
-  const initialsRegex = [...label.matchAll(/(\p{L}{1})\p{L}+/gu)] || [];
-
-  const initials = (
-    (initialsRegex.shift()?.[1] || '') + (initialsRegex.pop()?.[1] || '')
-  ).toUpperCase();
+  let initials = '';
+  const labelArray = label.trim().toUpperCase().split(/[\s_]/g);
+  if (labelArray.length === 1) {
+    initials = `${labelArray[0].charAt(0)}`;
+  } else {
+    initials = `${labelArray[0].charAt(0)}${labelArray[labelArray.length - 1].charAt(0)}`;
+  }
 
   return (
     <Avatar.Text
