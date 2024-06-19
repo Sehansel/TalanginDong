@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, cast, types } from 'mobx-state-tree';
-import { FriendRemoveStatus, PendingButtonStatus } from 'src/constants/misc';
+import { PendingButtonStatus } from 'src/constants/misc';
 
 export const TData = types.model({
   id: types.string,
@@ -12,13 +12,6 @@ export const TPendingList = types.model({
   data: types.array(TData),
 });
 
-export const TDialog = types.model({
-  visible: types.boolean,
-  id: types.string,
-  username: types.string,
-  status: types.string,
-});
-
 export const PendingStoreModel = types
   .model('PendingStore')
   .props({
@@ -29,7 +22,6 @@ export const PendingStoreModel = types
     buttonStatus: types.string,
     currentId: types.string,
     snackbar: types.string,
-    dialog: TDialog,
   })
   .actions((store) => ({
     setIsLoading(state: boolean) {
@@ -48,17 +40,6 @@ export const PendingStoreModel = types
     setSnackbar(value: string) {
       store.snackbar = value;
     },
-    setDialog(id: string, username: string, status: FriendRemoveStatus, visible?: boolean) {
-      store.dialog.id = id;
-      store.dialog.username = username;
-      store.dialog.status = status;
-      if (typeof visible === 'boolean') {
-        store.dialog.visible = visible;
-      }
-    },
-    setDialogVisible(state: boolean) {
-      store.dialog.visible = state;
-    },
     setFirstLoaded(state: boolean) {
       store.isFirstLoaded = state;
     },
@@ -70,12 +51,6 @@ export const PendingStoreModel = types
       store.buttonStatus = '0';
       store.currentId = '';
       store.snackbar = '';
-      store.dialog = {
-        visible: false,
-        id: '',
-        username: '',
-        status: '',
-      };
     },
   }));
 
