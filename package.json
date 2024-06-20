@@ -31,7 +31,7 @@
     "mobx": "^6.12.4",
     "mobx-react-lite": "^4.0.7",
     "mobx-state-tree": "^6.0.0",
-    "react": "18.3.1",
+    "react": "18.2.0",
     "react-content-loader": "^7.0.2",
     "react-native": "0.74.2",
     "react-native-gesture-handler": "~2.17.0",
