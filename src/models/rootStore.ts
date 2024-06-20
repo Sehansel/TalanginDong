@@ -1,5 +1,6 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 import { AuthenticationStoreModel } from 'src/models/authenticationStore';
+import { AddFriendsStoreModel } from 'src/models/friend/addFriendsStore';
 import { FriendsStoreModel } from 'src/models/friend/friendsStore';
 import { PendingStoreModel } from 'src/models/friend/pendingStore';
 
@@ -28,6 +29,14 @@ export const RootStoreModel = types.model('RootStore').props({
     isLoading: false,
     buttonStatus: '0',
     currentId: '',
+    snackbar: '',
+  }),
+  addFriendsStore: types.optional(AddFriendsStoreModel, {
+    searchResultList: [],
+    search: '',
+    pastSearch: '',
+    refreshing: false,
+    isLoading: false,
     snackbar: '',
     dialog: {
       visible: false,

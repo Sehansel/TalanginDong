@@ -60,3 +60,22 @@ export const accept = function accept(requesterId: string) {
     },
   });
 };
+
+export const search = function search(search: string) {
+  return request({
+    method: 'GET',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/search?search=${search}`,
+    useAuth: true,
+  });
+};
+
+export const requestFriend = function requestFriend(recipientId: string) {
+  return request({
+    method: 'POST',
+    url: `${API.TALANGIN_DONG_BASE_API}/v1/friend/request`,
+    useAuth: true,
+    data: {
+      recipientId,
+    },
+  });
+};

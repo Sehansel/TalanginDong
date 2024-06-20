@@ -5,6 +5,13 @@ export enum FriendRemoveStatus {
   REMOVED = 'removed',
 }
 
+export enum FriendRequestStatus {
+  NOT_REQUESTING = '',
+  ASK_CONFIRMATION = 'ASK_CONFIRMATION',
+  REQUESTING = 'requesting',
+  REQUESTED = 'requested',
+}
+
 export enum PendingButtonStatus {
   IDLE = '0',
   ACCEPT = '1',
