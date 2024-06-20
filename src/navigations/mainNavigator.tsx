@@ -90,6 +90,7 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
         name='Friend'
         component={FriendNavigator}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
             <TabBarButton
               focused={focused}
