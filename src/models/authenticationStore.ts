@@ -32,6 +32,10 @@ export const AuthenticationStoreModel = types
       store.authToken = undefined;
       store.authRefreshToken = undefined;
     },
+    reset() {
+      store.authToken = undefined;
+      store.authRefreshToken = undefined;
+    },
   }));
 
 export interface AuthenticationStore extends Instance<typeof AuthenticationStoreModel> {}

@@ -1,4 +1,4 @@
-import { Instance, SnapshotOut, types } from 'mobx-state-tree';
+import { Instance, SnapshotOut, cast, types } from 'mobx-state-tree';
 import { FriendRequestStatus } from 'src/constants/misc';
 
 export const TSearchResultList = types.model({
@@ -53,6 +53,20 @@ export const AddFriendsStoreModel = types
     },
     setDialogVisible(state: boolean) {
       store.dialog.visible = state;
+    },
+    reset() {
+      store.searchResultList = cast([]);
+      store.pastSearch = '';
+      store.search = '';
+      store.refreshing = false;
+      store.isLoading = false;
+      store.snackbar = '';
+      store.dialog = {
+        visible: false,
+        id: '',
+        username: '',
+        status: '',
+      };
     },
   }));
 
