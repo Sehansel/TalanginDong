@@ -7,7 +7,7 @@ import { FriendNavigator } from 'src/navigations/friendNavigator';
 import { CreateScreen } from 'src/screens/main/create';
 import { HistoryScreen } from 'src/screens/main/history';
 import { HomeScreen } from 'src/screens/main/home';
-import { ProfileScreen } from 'src/screens/main/profile';
+import { ProfileScreen } from 'src/screens/profile/profile';
 import { COLOR } from 'src/theme';
 
 interface ITabBarButton {
@@ -160,6 +160,7 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
         name='Profile'
         component={ProfileScreen}
         options={{
+          headerShown: false,
           tabBarIcon: ({ focused, color, size }) => (
             <TabBarButton
               focused={focused}
