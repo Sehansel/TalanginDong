@@ -164,32 +164,39 @@ export const AddFriendsScreen: React.FC<IAddFriendsProps> = observer(
               data={addFriendsStore.searchResultList.slice()}
               renderItem={({ item }) => {
                 return (
-                  <View
-                    style={{
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      paddingHorizontal: 20,
-                    }}>
-                    <CustomAvatar label={item.username} size={50} />
-                    <Text style={styles.usernameItem}>{item.username}</Text>
-                    <Button
-                      mode='contained'
-                      buttonColor={COLOR.PRIMARY}
-                      onPress={() => {
-                        addFriendsStore.setDialog(
-                          item.id,
-                          item.username,
-                          FriendRequestStatus.ASK_CONFIRMATION,
-                          true,
-                        );
-                      }}
-                      icon='account-plus'
+                  <>
+                    <View
                       style={{
-                        marginLeft: -50,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        paddingHorizontal: 20,
                       }}>
-                      Add
-                    </Button>
-                  </View>
+                      <CustomAvatar label={item.username} size={50} />
+                      <Text style={styles.usernameItem}>{item.username}</Text>
+                      <Button
+                        mode='contained'
+                        buttonColor={COLOR.PRIMARY}
+                        onPress={() => {
+                          addFriendsStore.setDialog(
+                            item.id,
+                            item.username,
+                            FriendRequestStatus.ASK_CONFIRMATION,
+                            true,
+                          );
+                        }}
+                        icon='account-plus'
+                        style={{
+                          marginLeft: -50,
+                        }}>
+                        Add
+                      </Button>
+                    </View>
+                    <View
+                      style={{
+                        height: item.id === addFriendsStore.searchResultList.at(-1)?.id ? 35 : 0,
+                      }}
+                    />
+                  </>
                 );
               }}
               keyExtractor={(item) => item.id}

@@ -195,7 +195,6 @@ export const ProfileScreen: React.FC<IProfileProps> = observer(function ProfileS
                 borderTopEndRadius: item.position === 'start' ? 10 : 0,
                 borderBottomStartRadius: item.position === 'end' ? 10 : 0,
                 borderBottomEndRadius: item.position === 'end' ? 10 : 0,
-                marginBottom: item.id === 'log_out' ? 35 : 0,
               }}
               onPress={() => handleClick(item.id)}>
               <View
@@ -231,6 +230,15 @@ export const ProfileScreen: React.FC<IProfileProps> = observer(function ProfileS
               <Text style={styles.profileTitle}>{section.title}</Text>
             </View>
           )}
+          renderSectionFooter={({ section }) => {
+            return (
+              <View
+                style={{
+                  height: section.title === profileItems.at(-1)?.title ? 35 : 0,
+                }}
+              />
+            );
+          }}
           keyExtractor={(item) => item.id}
           ItemSeparatorComponent={() => (
             <Divider

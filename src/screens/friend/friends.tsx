@@ -214,6 +214,15 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
                 <Text style={styles.usernameTitle}>{section.title}</Text>
               </View>
             )}
+            renderSectionFooter={({ section }) => {
+              return (
+                <View
+                  style={{
+                    height: section.title === friendsStore.friendList.at(-1)?.title ? 35 : 0,
+                  }}
+                />
+              );
+            }}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={() => <Divider />}
             stickySectionHeadersEnabled

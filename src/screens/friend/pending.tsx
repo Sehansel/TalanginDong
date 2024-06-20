@@ -314,6 +314,15 @@ export const PendingScreen: React.FC<IPendingProps> = observer(function PendingS
                 <Text style={styles.usernameTitle}>{section.title}</Text>
               </View>
             )}
+            renderSectionFooter={({ section }) => {
+              return (
+                <View
+                  style={{
+                    height: section.title === pendingStore.pendingList.at(-1)?.title ? 35 : 0,
+                  }}
+                />
+              );
+            }}
             keyExtractor={(item) => item.id}
             ItemSeparatorComponent={() => <Divider />}
             stickySectionHeadersEnabled
