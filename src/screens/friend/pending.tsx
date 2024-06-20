@@ -91,63 +91,65 @@ export const PendingScreen: React.FC<IPendingProps> = observer(function PendingS
     }
   }
 
-  async function cancelFriendRequest(id: string): Promise<boolean> {
+  async function cancelFriendRequest(id: string) {
     try {
       const response = await FriendService.cancel(id);
       pendingStore.setButtonStatus(id, PendingButtonStatus.DONE);
       if (response.ok) {
         pendingStore.setSnackbar('Successfully cancelled a friend request!');
+      } else if (response.data.status === 404) {
+        pendingStore.setSnackbar('This friend request not found!');
       } else if (isNetworkError(response.problem)) {
         pendingStore.setSnackbar('Please check your network connection before continue!');
       } else {
         pendingStore.setSnackbar('Unknown error occured');
       }
-      return false;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
       pendingStore.setButtonStatus(id, PendingButtonStatus.DONE);
       pendingStore.setSnackbar('Unknown error occured');
-      return false;
     }
   }
 
-  async function acceptFriendRequest(id: string): Promise<boolean> {
+  async function acceptFriendRequest(id: string) {
     try {
       const response = await FriendService.accept(id);
       pendingStore.setButtonStatus(id, PendingButtonStatus.DONE);
       if (response.ok) {
         pendingStore.setSnackbar('Successfully accepted a friend request!');
+      } else if (response.data.status === 404) {
+        pendingStore.setSnackbar('This friend request not found!');
+      } else if (response.data.status === 409) {
+        pendingStore.setSnackbar('This friend request already accepted!');
       } else if (isNetworkError(response.problem)) {
         pendingStore.setSnackbar('Please check your network connection before continue!');
       } else {
         pendingStore.setSnackbar('Unknown error occured');
       }
-      return false;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
       pendingStore.setButtonStatus(id, PendingButtonStatus.DONE);
       pendingStore.setSnackbar('Unknown error occured');
-      return false;
     }
   }
 
-  async function rejectFriendRequest(id: string): Promise<boolean> {
+  async function rejectFriendRequest(id: string) {
     try {
       const response = await FriendService.reject(id);
       pendingStore.setButtonStatus(id, PendingButtonStatus.DONE);
       if (response.ok) {
         pendingStore.setSnackbar('Successfully rejected a friend request!');
+      } else if (response.data.status === 404) {
+        pendingStore.setSnackbar('This friend request not found!');
       } else if (isNetworkError(response.problem)) {
         pendingStore.setSnackbar('Please check your network connection before continue!');
       } else {
         pendingStore.setSnackbar('Unknown error occured');
       }
-      return false;
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error: any) {
       pendingStore.setButtonStatus(id, PendingButtonStatus.DONE);
       pendingStore.setSnackbar('Unknown error occured');
-      return false;
     }
   }
 

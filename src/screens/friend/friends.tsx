@@ -120,6 +120,9 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
       const response = await FriendService.remove(id);
       if (response.ok) {
         return true;
+      } else if (response.data.status === 404) {
+        friendsStore.setSnackbar('This friend not found!');
+        return false;
       }
       if (isNetworkError(response.problem)) {
         friendsStore.setSnackbar('Please check your network connection before continue!');
@@ -336,20 +339,17 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
                         friendsStore.dialog.username,
                         FriendRemoveStatus.REMOVED,
                       );
-                      setTimeout(async () => {
+                    }
+                    setTimeout(
+                      async () => {
                         friendsStore.setDialogVisible(false);
                         setTimeout(() => {
                           friendsStore.setDialog('', '', FriendRemoveStatus.NOT_REMOVING);
                         }, 200);
                         refreshFriends();
-                      }, 2000);
-                    } else {
-                      friendsStore.setDialog(
-                        friendsStore.dialog.id,
-                        friendsStore.dialog.username,
-                        FriendRemoveStatus.ASK_CONFIRMATION,
-                      );
-                    }
+                      },
+                      isSucceed ? 2000 : 0,
+                    );
                   }}
                   loading={friendsStore.dialog.status === FriendRemoveStatus.REMOVING}>
                   Confirm
