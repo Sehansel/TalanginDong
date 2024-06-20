@@ -153,11 +153,19 @@ export const PendingScreen: React.FC<IPendingProps> = observer(function PendingS
     }
   }
 
-  async function refreshPending() {
-    pendingStore.setRefreshing(true);
+  async function refreshPending(manualRefresh?: boolean) {
+    if (manualRefresh) {
+      pendingStore.setRefreshing(true);
+    } else {
+      pendingStore.setIsLoading(true);
+    }
     pendingStore.setPending([]);
     await getPendingList();
-    pendingStore.setRefreshing(false);
+    if (manualRefresh) {
+      pendingStore.setRefreshing(false);
+    } else {
+      pendingStore.setIsLoading(false);
+    }
   }
 
   const CustomButton: React.FC<ICustomButtonProps> = observer(function CustomButton(props) {
@@ -248,9 +256,7 @@ export const PendingScreen: React.FC<IPendingProps> = observer(function PendingS
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
-        pendingStore.setIsLoading(true);
-        await getPendingList();
-        pendingStore.setIsLoading(false);
+        refreshPending();
         pendingStore.setFirstLoaded(true);
       })();
       return () => {};
@@ -315,7 +321,7 @@ export const PendingScreen: React.FC<IPendingProps> = observer(function PendingS
             refreshControl={
               <CustomRefreshControl
                 refreshing={pendingStore.refreshing}
-                onRefresh={refreshPending}
+                onRefresh={() => refreshPending(true)}
               />
             }
             ListEmptyComponent={

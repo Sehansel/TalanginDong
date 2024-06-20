@@ -108,11 +108,19 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
     }
   }
 
-  async function refreshFriends() {
-    friendsStore.setRefreshing(true);
+  async function refreshFriends(manualRefresh?: boolean) {
+    if (manualRefresh) {
+      friendsStore.setRefreshing(true);
+    } else {
+      friendsStore.setIsLoading(true);
+    }
     friendsStore.setFriends([]);
     await getFriendList();
-    friendsStore.setRefreshing(false);
+    if (manualRefresh) {
+      friendsStore.setRefreshing(false);
+    } else {
+      friendsStore.setIsLoading(false);
+    }
   }
 
   async function removeFriend(id: string): Promise<boolean> {
@@ -152,9 +160,7 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
-        friendsStore.setIsLoading(true);
-        await getFriendList();
-        friendsStore.setIsLoading(false);
+        refreshFriends();
         friendsStore.setFirstLoaded(true);
       })();
       return () => {};
@@ -215,7 +221,7 @@ export const FriendsScreen: React.FC<IFriendsProps> = observer(function FriendsS
             refreshControl={
               <CustomRefreshControl
                 refreshing={friendsStore.refreshing}
-                onRefresh={refreshFriends}
+                onRefresh={() => refreshFriends(true)}
               />
             }
             ListEmptyComponent={
