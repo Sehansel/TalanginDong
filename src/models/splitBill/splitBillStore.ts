@@ -25,7 +25,7 @@ export const SplitBillStoreModel = types
     tax: types.number,
     others: types.number,
     total: types.number,
-    selectedFriends: types.optional(types.array(TFriends), []),
+    members: types.optional(types.array(TFriends), []),
   })
   .actions((store) => ({
     setImage(Uri: string, base64: string) {
@@ -86,8 +86,20 @@ export const SplitBillStoreModel = types
       store.total = value;
       this.calculateSubtotalAndOthers();
     },
-    setSelectedFriends(value: any) {
-      store.selectedFriends = value;
+    setMembers(value: any) {
+      store.members = value;
+    },
+    addMembers(id: string, username: string) {
+      if (!store.members.find((member) => member.id === id)) {
+        store.members.push({
+          id,
+          username,
+        });
+      }
+    },
+    removeMembers(id: string) {
+      const newMembers: any = store.members.filter((member) => member.id !== id);
+      store.members = newMembers;
     },
     reset() {
       store.imageUri = undefined;
@@ -98,7 +110,7 @@ export const SplitBillStoreModel = types
       store.tax = 0;
       store.others = 0;
       store.total = 0;
-      store.selectedFriends = cast([]);
+      store.members = cast([]);
     },
   }));
 

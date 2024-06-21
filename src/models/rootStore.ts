@@ -57,7 +57,7 @@ export const RootStoreModel = types.model('RootStore').props({
     tax: 0,
     others: 0,
     total: 0,
-    selectedFriends: [],
+    members: [],
   }),
 });
 
