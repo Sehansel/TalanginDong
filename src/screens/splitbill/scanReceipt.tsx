@@ -68,25 +68,20 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
       try {
         const response = await TextractService.scanReceipt(splitBillStore.imageBase64);
         if (response.ok) {
-          let price = 0;
           const items = [];
           for (const item of response.data?.data?.items ?? []) {
             items.push({
               item: item.item,
               quantity: item.quantity,
               price: item.price,
+              pricePerItem: item.price / item.quantity,
               members: [],
             });
-            price += item.price;
           }
           splitBillStore.setItems(items);
-          splitBillStore.setSubtotal(response.data?.data?.summary?.subtotal ?? 0);
           splitBillStore.setDiscount(response.data?.data?.summary?.discount ?? 0);
           splitBillStore.setTax(response.data?.data?.summary?.tax ?? 0);
           splitBillStore.setTotal(response.data?.data?.summary?.total ?? 0);
-          price -= splitBillStore.discount;
-          price += splitBillStore.tax;
-          splitBillStore.setOthers(splitBillStore.total - price);
           navigation.navigate('EditBill');
         } else if (isNetworkError(response.problem)) {
           scanReceiptStore.setSnackbar('Please check your network connection before continue!');
@@ -95,6 +90,7 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
         }
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
       } catch (error) {
+        console.log(error);
         scanReceiptStore.setSnackbar('Unknown error occured!');
       }
     }

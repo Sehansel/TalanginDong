@@ -7,8 +7,9 @@ export const TFriends = types.model({
 
 export const TItems = types.model({
   item: types.string,
-  quantity: types.number,
-  price: types.integer,
+  quantity: types.integer,
+  price: types.number,
+  pricePerItem: types.number,
   members: types.optional(types.array(TFriends), []),
 });
 
@@ -17,12 +18,13 @@ export const SplitBillStoreModel = types
   .props({
     imageUri: types.maybe(types.string),
     imageBase64: types.maybe(types.string),
+    billName: types.string,
     items: types.optional(types.array(TItems), []),
-    subtotal: types.integer,
-    discount: types.integer,
-    tax: types.integer,
-    others: types.integer,
-    total: types.integer,
+    subtotal: types.number,
+    discount: types.number,
+    tax: types.number,
+    others: types.number,
+    total: types.number,
     selectedFriends: types.optional(types.array(TFriends), []),
   })
   .actions((store) => ({
@@ -30,23 +32,59 @@ export const SplitBillStoreModel = types
       store.imageUri = Uri;
       store.imageBase64 = base64;
     },
+    setBillName(value: string) {
+      store.billName = value;
+    },
+    calculateSubtotalAndOthers() {
+      let subtotal = 0;
+      for (const item of store.items) {
+        subtotal += item.price;
+      }
+      store.subtotal = subtotal;
+      store.others = store.total - (store.subtotal + store.tax - store.discount);
+    },
     setItems(value: any) {
       store.items = value;
+      this.calculateSubtotalAndOthers();
     },
-    setSubtotal(value: number) {
-      store.subtotal = value;
+    setItem(value: any, index: number) {
+      if (value.item) {
+        store.items[index].item = value.item;
+      }
+      if (value.quantity) {
+        store.items[index].quantity = value.quantity;
+      }
+      if (value.price) {
+        store.items[index].price = value.price;
+      }
+      if (value.pricePerItem) {
+        store.items[index].pricePerItem = value.pricePerItem;
+      }
+      if (value.members) {
+        store.items[index].members = value.members;
+      }
+      this.calculateSubtotalAndOthers();
+    },
+    createItem() {
+      store.items.push({
+        item: '',
+        quantity: 0,
+        price: 0,
+        pricePerItem: 0,
+        members: [],
+      });
     },
     setDiscount(value: number) {
       store.discount = value;
+      this.calculateSubtotalAndOthers();
     },
     setTax(value: number) {
       store.tax = value;
-    },
-    setOthers(value: number) {
-      store.others = value;
+      this.calculateSubtotalAndOthers();
     },
     setTotal(value: number) {
       store.total = value;
+      this.calculateSubtotalAndOthers();
     },
     setSelectedFriends(value: any) {
       store.selectedFriends = value;

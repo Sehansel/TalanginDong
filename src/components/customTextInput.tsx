@@ -1,17 +1,20 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text, StyleProp, ViewStyle } from 'react-native';
 import { TextInput } from 'react-native-paper';
 import { COLOR } from 'src/theme';
 
-type ICustomTextInputProps = React.ComponentProps<typeof TextInput> & { errorText?: string };
+type ICustomTextInputProps = React.ComponentProps<typeof TextInput> & {
+  errorText?: string;
+  containerStyle?: StyleProp<ViewStyle>;
+};
 
 export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
   function CustomTextInput(props) {
     const { errorText, secureTextEntry, autoCapitalize, keyboardType } = props;
     const [isPasswordHidden, setIsPasswordHidden] = React.useState(true);
     return (
-      <View style={styles.container}>
+      <View style={props.containerStyle ?? styles.container}>
         <TextInput
           {...props}
           mode='outlined'
@@ -30,7 +33,7 @@ export const CustomTextInput: React.FC<ICustomTextInputProps> = observer(
             ) : undefined
           }
           textColor='black'
-          style={styles.textInput}
+          style={props.style ? props.style : styles.textInput}
           activeOutlineColor={COLOR.PRIMARY}
           outlineColor={COLOR.GREY_1}
           theme={{

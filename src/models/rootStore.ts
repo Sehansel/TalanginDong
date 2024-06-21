@@ -50,6 +50,7 @@ export const RootStoreModel = types.model('RootStore').props({
   splitBillStore: types.optional(SplitBillStoreModel, {
     imageUri: undefined,
     imageBase64: undefined,
+    billName: '',
     items: [],
     subtotal: 0,
     discount: 0,
