@@ -1,7 +1,7 @@
 import { Instance, SnapshotOut, types } from 'mobx-state-tree';
 
 export const ProfileStoreModel = types
-  .model('profileStore')
+  .model('ProfileStore')
   .props({
     username: types.maybe(types.string),
     snackbar: types.string,

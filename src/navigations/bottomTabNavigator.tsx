@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StackNavigationProp } from '@react-navigation/stack';
 import React from 'react';
 import { Text, View } from 'react-native';
 import { TouchableRipple } from 'react-native-paper';
@@ -9,6 +10,8 @@ import { HistoryScreen } from 'src/screens/main/history';
 import { HomeScreen } from 'src/screens/main/home';
 import { ProfileScreen } from 'src/screens/profile/profile';
 import { COLOR } from 'src/theme';
+
+import { AppNavigatorParamList } from './appNavigator';
 
 interface ITabBarButton {
   focused: boolean;
@@ -38,9 +41,11 @@ const TabBarButton: React.FC<ITabBarButton> = function TabBarButton(props) {
   );
 };
 
-interface IMainNavigator {}
+interface IBottomTabNavigator {
+  navigation: StackNavigationProp<AppNavigatorParamList>;
+}
 
-export type MainNavigatorParamList = {
+export type BottomTabNavigatorParamList = {
   Home: undefined;
   Friend: undefined;
   Create: undefined;
@@ -48,9 +53,12 @@ export type MainNavigatorParamList = {
   Profile: undefined;
 };
 
-const Tab = createBottomTabNavigator<MainNavigatorParamList>();
+const Tab = createBottomTabNavigator<BottomTabNavigatorParamList>();
 
-export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(props) {
+export const BottomTabNavigator: React.FC<IBottomTabNavigator> = function BottomTabNavigator(
+  props,
+) {
+  const { navigation } = props;
   return (
     <Tab.Navigator
       screenOptions={{
@@ -135,7 +143,7 @@ export const MainNavigator: React.FC<IMainNavigator> = function HomeNavigator(pr
                 shadowRadius: 3.5,
                 elevation: 5,
               }}
-              onPress={props.onPress}>
+              onPress={() => navigation.navigate('SplitBillNavigator')}>
               {props.children}
             </TouchableRipple>
           ),

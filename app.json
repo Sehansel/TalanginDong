@@ -68,6 +68,13 @@
       {
         "faceIDPermission": "Allow $(PRODUCT_NAME) to access your Face ID biometric data."
       }
+    ],
+    [
+      "expo-image-picker",
+      {
+        "photosPermission": "The app accesses your photos to scan receipt.",
+        "cameraPermission": "The app accesses your camera to scan receipt."
+      }
     ]
   ],
   "experiments": {
