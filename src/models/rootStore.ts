@@ -4,7 +4,7 @@ import { AddFriendsStoreModel } from 'src/models/friend/addFriendsStore';
 import { FriendsStoreModel } from 'src/models/friend/friendsStore';
 import { PendingStoreModel } from 'src/models/friend/pendingStore';
 
-import { SplitBillStoreModel } from './splitBill/splitBillStore';
+import { BillStoreModel } from './splitBill/billStore';
 
 /**
  * A RootStore model.
@@ -47,7 +47,7 @@ export const RootStoreModel = types.model('RootStore').props({
       status: '',
     },
   }),
-  splitBillStore: types.optional(SplitBillStoreModel, {
+  billStore: types.optional(BillStoreModel, {
     imageUri: undefined,
     imageBase64: undefined,
     billName: '',

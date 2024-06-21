@@ -18,7 +18,7 @@ interface IEditBillProps {
 }
 
 export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBillScreen(props) {
-  const { splitBillStore } = useStores();
+  const { billStore } = useStores();
   const { navigation } = props;
   return (
     <>
@@ -33,12 +33,11 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                 width: '90%',
                 alignSelf: 'center',
               }}
-              placeholder='test'
-              value={splitBillStore.billName}
-              onChangeText={(text) => splitBillStore.setBillName(text)}
+              value={billStore.billName}
+              onChangeText={(text) => billStore.setBillName(text)}
             />
           </View>
-          {splitBillStore.items.slice().map((item, index) => {
+          {billStore.items.slice().map((item, index) => {
             return (
               <View
                 key={index}
@@ -51,7 +50,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                 <CustomTextInput
                   style={styles.itemInput}
                   value={item.item}
-                  onChangeText={(text) => splitBillStore.setItem({ item: text }, index)}
+                  onChangeText={(text) => billStore.setItem({ item: text }, index)}
                 />
                 <View
                   style={{
@@ -66,7 +65,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                     }}
                     value={numberToCurrency(item.pricePerItem)}
                     onChangeText={(currency) => {
-                      splitBillStore.setItem({ pricePerItem: currencyToNumber(currency) }, index);
+                      billStore.setItem({ pricePerItem: currencyToNumber(currency) }, index);
                     }}
                     textAlign='right'
                   />
@@ -85,7 +84,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                       }}
                       value={item.quantity.toString()}
                       onChangeText={(text) =>
-                        splitBillStore.setItem({ quantity: parseInt(text, 10) }, index)
+                        billStore.setItem({ quantity: parseInt(text, 10) }, index)
                       }
                     />
                     <Text>X</Text>
@@ -96,7 +95,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                       }}
                       value={numberToCurrency(item.price)}
                       onChangeText={(currency) => {
-                        splitBillStore.setItem({ price: currencyToNumber(currency) }, index);
+                        billStore.setItem({ price: currencyToNumber(currency) }, index);
                       }}
                       textAlign='right'
                     />
@@ -115,7 +114,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
               icon='plus'
               buttonColor={COLOR.PRIMARY}
               style={{ width: 120, alignSelf: 'flex-start' }}
-              onPress={() => splitBillStore.createItem()}>
+              onPress={() => billStore.createItem()}>
               Add item
             </Button>
           </View>
@@ -132,7 +131,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                 groupSeparator: ',',
                 precision: 2,
               }}>
-              {numberToCurrency(splitBillStore.subtotal)}
+              {numberToCurrency(billStore.subtotal)}
             </MaskedText>
           </View>
           <View style={styles.summaryView}>
@@ -142,9 +141,9 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
               containerStyle={{
                 width: '40%',
               }}
-              value={numberToCurrency(splitBillStore.tax)}
+              value={numberToCurrency(billStore.tax)}
               onChangeText={(currency) => {
-                splitBillStore.setTax(currencyToNumber(currency));
+                billStore.setTax(currencyToNumber(currency));
               }}
             />
           </View>
@@ -155,9 +154,9 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
               containerStyle={{
                 width: '40%',
               }}
-              value={numberToCurrency(splitBillStore.discount)}
+              value={numberToCurrency(billStore.discount)}
               onChangeText={(currency) => {
-                splitBillStore.setDiscount(currencyToNumber(currency));
+                billStore.setDiscount(currencyToNumber(currency));
               }}
             />
           </View>
@@ -171,7 +170,7 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                 groupSeparator: ',',
                 precision: 2,
               }}>
-              {numberToCurrency(splitBillStore.others)}
+              {numberToCurrency(billStore.others)}
             </MaskedText>
           </View>
           <View style={styles.summaryView}>
@@ -181,9 +180,9 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
               containerStyle={{
                 width: '40%',
               }}
-              value={numberToCurrency(splitBillStore.total)}
+              value={numberToCurrency(billStore.total)}
               onChangeText={(currency) => {
-                splitBillStore.setTotal(currencyToNumber(currency));
+                billStore.setTotal(currencyToNumber(currency));
               }}
               textAlign='right'
             />

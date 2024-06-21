@@ -38,7 +38,7 @@ const LoaderItem: React.FC<ILoaderProps> = function LoaderItem() {
 export const SelectMembersScreen: React.FC<ISelectMembersProps> = observer(
   function SelectMemberscreen(props) {
     const { navigation } = props;
-    const { splitBillStore } = useStores();
+    const { billStore } = useStores();
     const selectMembersStore = useLocalObservable(() =>
       SelectMemberStoreModel.create({
         friendList: [],
@@ -103,13 +103,13 @@ export const SelectMembersScreen: React.FC<ISelectMembersProps> = observer(
 
     const friendsData: any = [];
 
-    if (splitBillStore.members.length > 0) {
+    if (billStore.members.length > 0) {
       friendsData.push({
         title: 'Members',
-        data: splitBillStore.members,
+        data: billStore.members,
       });
     }
-    const selectedMembersIdList = splitBillStore.members.map((value) => value.id);
+    const selectedMembersIdList = billStore.members.map((value) => value.id);
     friendsData.push({
       title: 'Add More',
       data: selectMembersStore.friendList.filter(
@@ -168,7 +168,7 @@ export const SelectMembersScreen: React.FC<ISelectMembersProps> = observer(
                       icon='account-plus-outline'
                       iconColor={COLOR.PRIMARY}
                       onPress={() => {
-                        splitBillStore.addMembers(item.id, item.username);
+                        billStore.addMembers(item.id, item.username);
                       }}
                     />
                   ) : (
@@ -176,7 +176,7 @@ export const SelectMembersScreen: React.FC<ISelectMembersProps> = observer(
                       icon='account-minus-outline'
                       iconColor='red'
                       onPress={() => {
-                        splitBillStore.removeMembers(item.id);
+                        billStore.removeMembers(item.id);
                       }}
                     />
                   )}

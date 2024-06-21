@@ -19,7 +19,7 @@ interface IScanReceiptProps {
 export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
   function ScanReceiptScreen(props) {
     const { navigation } = props;
-    const { splitBillStore } = useStores();
+    const { billStore } = useStores();
     const scanReceiptStore = useLocalObservable(() =>
       ScanReceiptStoreModel.create({
         dialog: true,
@@ -40,7 +40,7 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
         });
         scanReceiptStore.setDialog(false);
         if (!image.canceled && image.assets[0] && image.assets[0].base64) {
-          splitBillStore.setImage(image.assets[0].uri, image.assets[0].base64);
+          billStore.setImage(image.assets[0].uri, image.assets[0].base64);
         }
       }
     }
@@ -55,18 +55,18 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
         });
         scanReceiptStore.setDialog(false);
         if (!image.canceled && image.assets[0] && image.assets[0].base64) {
-          splitBillStore.setImage(image.assets[0].uri, image.assets[0].base64);
+          billStore.setImage(image.assets[0].uri, image.assets[0].base64);
         }
       }
     }
 
     async function scanReceipt() {
-      if (!splitBillStore.imageUri || !splitBillStore.imageBase64) {
+      if (!billStore.imageUri || !billStore.imageBase64) {
         scanReceiptStore.setSnackbar('Please select photo first!');
         return;
       }
       try {
-        const response = await TextractService.scanReceipt(splitBillStore.imageBase64);
+        const response = await TextractService.scanReceipt(billStore.imageBase64);
         if (response.ok) {
           const items = [];
           for (const item of response.data?.data?.items ?? []) {
@@ -78,10 +78,11 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
               members: [],
             });
           }
-          splitBillStore.setItems(items);
-          splitBillStore.setDiscount(response.data?.data?.summary?.discount ?? 0);
-          splitBillStore.setTax(response.data?.data?.summary?.tax ?? 0);
-          splitBillStore.setTotal(response.data?.data?.summary?.total ?? 0);
+          billStore.setItems(items);
+          billStore.setDiscount(response.data?.data?.summary?.discount ?? 0);
+          billStore.setTax(response.data?.data?.summary?.tax ?? 0);
+          billStore.setTotal(response.data?.data?.summary?.total ?? 0);
+          billStore.setBillName(`${new Date().toLocaleString()} Untitled Bill`);
           navigation.navigate('EditBill');
         } else if (isNetworkError(response.problem)) {
           scanReceiptStore.setSnackbar('Please check your network connection before continue!');
@@ -98,14 +99,14 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
     return (
       <>
         <View style={styles.container}>
-          {splitBillStore.imageUri ? (
+          {billStore.imageUri ? (
             <Image
               style={{
                 width: '80%',
                 height: '80%',
               }}
               source={{
-                uri: splitBillStore.imageUri,
+                uri: billStore.imageUri,
               }}
             />
           ) : (
