@@ -90,16 +90,34 @@ export const BillStoreModel = types
       store.members = value;
     },
     addMembers(id: string, username: string) {
+      const newMembers: any = store.members;
       if (!store.members.find((member) => member.id === id)) {
-        store.members.push({
+        newMembers.push({
           id,
           username,
         });
       }
+      store.members = newMembers.sort((a: any, b: any) => a.username.localeCompare(b.username));
     },
     removeMembers(id: string) {
       const newMembers: any = store.members.filter((member) => member.id !== id);
       store.members = newMembers;
+    },
+    addItemMembers(id: string, username: string, index: number) {
+      const newMembers: any = store.items[index].members;
+      if (!store.items[index].members.find((member) => member.id === id)) {
+        newMembers.push({
+          id,
+          username,
+        });
+      }
+      store.items[index].members = newMembers.sort((a: any, b: any) =>
+        a.username.localeCompare(b.username),
+      );
+    },
+    removeItemMembers(id: string, index: number) {
+      const newMembers: any = store.items[index].members.filter((member) => member.id !== id);
+      store.items[index].members = newMembers;
     },
     reset() {
       store.imageUri = undefined;

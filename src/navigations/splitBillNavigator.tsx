@@ -1,6 +1,7 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
 import { EditBillScreen } from 'src/screens/splitbill/editBill';
+import { ReviewBillScreen } from 'src/screens/splitbill/reviewBill';
 import { ScanReceiptScreen } from 'src/screens/splitbill/scanReceipt';
 import { SelectMembersScreen } from 'src/screens/splitbill/selectMembers';
 import { SplitBillScreen } from 'src/screens/splitbill/splitBill';
@@ -12,6 +13,7 @@ export type SplitBillNavigatorParamList = {
   EditBill: undefined;
   SelectMembers: undefined;
   SplitBill: undefined;
+  ReviewBill: undefined;
 };
 
 const Stack = createStackNavigator<SplitBillNavigatorParamList>();
@@ -47,6 +49,13 @@ export const SplitBillNavigator: React.FC<ISplitBillNavigator> = function SplitB
         component={SplitBillScreen}
         options={{
           headerTitle: 'Split Bill',
+        }}
+      />
+      <Stack.Screen
+        name='ReviewBill'
+        component={ReviewBillScreen}
+        options={{
+          headerTitle: 'Review Bill',
         }}
       />
     </Stack.Navigator>
