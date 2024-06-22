@@ -74,6 +74,11 @@ export const BillStoreModel = types
         members: [],
       });
     },
+    removeItem(index: number) {
+      const newItems: any = store.items;
+      newItems.splice(index, 1);
+      store.items = newItems;
+    },
     setDiscount(value: number) {
       store.discount = value;
       this.calculateSubtotalAndOthers();
