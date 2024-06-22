@@ -72,9 +72,9 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
           for (const item of response.data?.data?.items ?? []) {
             items.push({
               item: item.item,
-              quantity: item.quantity,
+              quantity: item.quantity === 0 ? 1 : item.quantity,
               price: item.price,
-              pricePerItem: item.price / item.quantity,
+              pricePerItem: item.price / (item.quantity === 0 ? 1 : item.quantity),
               members: [],
             });
           }
@@ -95,6 +95,10 @@ export const ScanReceiptScreen: React.FC<IScanReceiptProps> = observer(
         scanReceiptStore.setSnackbar('Unknown error occured!');
       }
     }
+
+    React.useMemo(() => {
+      billStore.reset();
+    }, []);
 
     return (
       <>

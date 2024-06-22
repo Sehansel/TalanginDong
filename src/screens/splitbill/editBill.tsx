@@ -5,7 +5,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-controller';
 import { MaskedText } from 'react-native-mask-text';
-import { Button, Divider } from 'react-native-paper';
+import { Button, Divider, IconButton, Menu } from 'react-native-paper';
 import { CustomCurrencyTextInput } from 'src/components/customCurrencyTextInput';
 import { CustomTextInput } from 'src/components/customTextInput';
 import { useStores } from 'src/models';
@@ -16,6 +16,32 @@ import { currencyToNumber, numberToCurrency } from 'src/utils/currencyModifier';
 interface IEditBillProps {
   navigation: StackNavigationProp<SplitBillNavigatorParamList>;
 }
+
+interface ICustomMenuProps {
+  index: number;
+}
+
+const CustomMenu: React.FC<ICustomMenuProps> = observer(function CustomMenu(props) {
+  const { index } = props;
+  const { billStore } = useStores();
+  const [visible, setVisible] = React.useState(false);
+  return (
+    <Menu
+      visible={visible}
+      onDismiss={() => setVisible(false)}
+      anchor={
+        <IconButton iconColor='grey' icon='dots-vertical' onPress={() => setVisible(true)} />
+      }>
+      <Menu.Item
+        onPress={() => {
+          setVisible(false);
+          billStore.removeItem(index);
+        }}
+        title='Remove'
+      />
+    </Menu>
+  );
+});
 
 export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBillScreen(props) {
   const { billStore } = useStores();
@@ -47,11 +73,26 @@ export const EditBillScreen: React.FC<IEditBillProps> = observer(function EditBi
                   marginTop: index === 0 ? 8 : 20,
                 }}>
                 <Divider style={{ marginBottom: 8 }} />
-                <CustomTextInput
-                  style={styles.itemInput}
-                  value={item.item}
-                  onChangeText={(text) => billStore.setItem({ item: text }, index)}
-                />
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}>
+                  <CustomTextInput
+                    style={{
+                      height: 40,
+                      fontSize: 13,
+                    }}
+                    containerStyle={{
+                      width: '90%',
+                      marginRight: -5,
+                    }}
+                    value={item.item}
+                    onChangeText={(text) => billStore.setItem({ item: text }, index)}
+                  />
+                  <CustomMenu index={index} />
+                </View>
                 <View
                   style={{
                     flexDirection: 'row',
