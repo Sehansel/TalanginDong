@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 import { MaskedText } from 'react-native-mask-text';
 import { CustomAvatar } from 'src/components/customAvatar';
+import { CustomRefreshControl } from 'src/components/customRefreshControl';
 import * as BillService from 'src/services/billService';
 import { COLOR } from 'src/theme';
 import { numberToCurrency } from 'src/utils/currencyModifier';
@@ -13,6 +14,7 @@ interface IHistoryProps {}
 
 export const HistoryScreen: React.FC<IHistoryProps> = observer(function HistoryScreen(props) {
   const [data, setData] = useState<any>([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   async function getBill() {
     try {
@@ -27,7 +29,9 @@ export const HistoryScreen: React.FC<IHistoryProps> = observer(function HistoryS
   useFocusEffect(
     React.useCallback(() => {
       (async () => {
-        getBill();
+        setRefreshing(true);
+        await getBill();
+        setRefreshing(false);
       })();
       return () => {};
     }, []),
@@ -106,6 +110,16 @@ export const HistoryScreen: React.FC<IHistoryProps> = observer(function HistoryS
               </View>
             );
           }}
+          refreshControl={
+            <CustomRefreshControl
+              refreshing={refreshing}
+              onRefresh={async () => {
+                setRefreshing(true);
+                await getBill();
+                setRefreshing(false);
+              }}
+            />
+          }
         />
         <StatusBar style='auto' />
       </View>
